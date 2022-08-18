@@ -9,8 +9,8 @@
 3. ¿Qué es Artificial?  
 4. ¿Qué es la Inteligencia Artificial?
 
-## Dos *aplicaciones* de Inteligencia Artificial:
----
+Dos *aplicaciones* de Inteligencia Artificial:
+===
 ## *Inteligencia artificial para luchar contra el tráfico ilegal de tigres:*
 ![][pielTigre]
 El instituto nacinal de ciencias de datos y de inteligencia artificial del Reino Unido, está desarrollando una nueva inteligencia artificial para identificar tigres a partir del patron de rayas.
@@ -20,21 +20,21 @@ Se espera que la nueva tecnología ayude a determinar de dónde provienen las pi
 ---
 ## *Inteligencia Artificial para mejorar el rendimiento de los surfistas y reducir el riesgo de accidentes*
 USA Surfing, el equipo de surf de Estados Unidos, y Microsoft han trabajado juntos con el objetivo de utilizar la Inteligencia Artificial (IA) para mejorar el rendimiento y reducir las lesiones de los atletas.  
-![][surf]
+![][surf]  
 Y el resultado ha sido una solución de IA que, a través de la grabación de imágenes desde tierra, captura las imágenes de los surfistas en movimiento y emplea la inteligencia artificial para determinar tanto las fortalezas como las deficiencias de los movimientos de estos.  
  USA Surfing puede identificar rápidamente aquellas mecánicas que pueden provocar lesiones y obstaculizar el rendimiento.  
  **La tecnología de Microsoft ofrece datos rápidamente a los profesionales del surf, lo que les permite comprender mejor los movimientos de los atletas en el agua.**
 
 ---
-## ¿Qué es la Inteligencia?
----
+¿Qué es la Inteligencia?
+===
 Se entiendo por **Inteligencia** a la capacidad de *entender*, *razonar*, *saber*, *aprender* y ***resolver problemas***.  
 Es un concepto abstracto y relacionado támbien con el concepto de Intelecto.  
 ## ¿Qué es Artificial?  
 ---
 Se entiende por **Artificial** el adjetivo que se le atribuye a algo que ***no es natural*** o ***finge ser natural***. Támbien, cuando hablamos de **Artificial**, se puede pensar en todo lo que es *fabricado* o *producido* por el **ser humano**.
-## ¿Qué es la Inteligencia Artificial?
----
+¿Qué es la Inteligencia Artificial?
+===
 La **Inteligencia Artificial(IA)** se trata de la combinación de algoritmos con el proposito de crear una maquina ***pensante*** o ***inteligente***. Claramente es denominada ***artificial*** ya que es creada por el hombre y no es natural.
 
 Existen tipos de **Inteligencia Artificial** según al fin a las que estan orientadas. 
