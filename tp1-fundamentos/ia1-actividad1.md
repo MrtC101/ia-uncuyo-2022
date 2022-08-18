@@ -11,6 +11,7 @@
 
 Dos *aplicaciones* de Inteligencia Artificial:
 ===
+
 ## *Inteligencia artificial para luchar contra el tráfico ilegal de tigres:*
 ![][pielTigre]
 El instituto nacinal de ciencias de datos y de inteligencia artificial del Reino Unido, está desarrollando una nueva inteligencia artificial para identificar tigres a partir del patron de rayas.
@@ -28,13 +29,18 @@ Y el resultado ha sido una solución de IA que, a través de la grabación de im
 ---
 ¿Qué es la Inteligencia?
 ===
+
 Se entiendo por **Inteligencia** a la capacidad de *entender*, *razonar*, *saber*, *aprender* y ***resolver problemas***.  
 Es un concepto abstracto y relacionado támbien con el concepto de Intelecto.  
-## ¿Qué es Artificial?  
----
+
+¿Qué es Artificial?  
+===
+
 Se entiende por **Artificial** el adjetivo que se le atribuye a algo que ***no es natural*** o ***finge ser natural***. Támbien, cuando hablamos de **Artificial**, se puede pensar en todo lo que es *fabricado* o *producido* por el **ser humano**.
+
 ¿Qué es la Inteligencia Artificial?
 ===
+
 La **Inteligencia Artificial(IA)** se trata de la combinación de algoritmos con el proposito de crear una maquina ***pensante*** o ***inteligente***. Claramente es denominada ***artificial*** ya que es creada por el hombre y no es natural.
 
 Existen tipos de **Inteligencia Artificial** según al fin a las que estan orientadas. 
