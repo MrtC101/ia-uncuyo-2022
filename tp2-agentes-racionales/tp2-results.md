@@ -1,6 +1,11 @@
 ## **Martín Cogo Belver**
+
+## Referencias:
+El campo Time, score y remaning Dirt tienen un promedio de los resultados  de todas las iteraciones.
+
 # Resultados:
-|Random|Size|Iterations|Time|Score|Reameaning Dirt| 
+
+|Random|Size|Iterations|Time|Score|Remaining Dirt| 
 |:-------:|:--:|:-------:|:---------:|:---------:|:------------:|
 |No|	2x2	|999|	3|	1|	0|
 |Si|	2x2	|999|	4|	1|	0|
