@@ -19,7 +19,7 @@ class Agent:
         self.currPos.setX(self.currPos.getX()+1)
 
     def suck(self):
-        self.env.get_clean(self.currPos.getX(),self.currPos.getY())
+        self.env.get_clean(self,self.currPos.getX(),self.currPos.getY())
 
     def idle(self):
         None

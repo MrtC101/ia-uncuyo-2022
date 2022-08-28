@@ -26,10 +26,13 @@ class Environment:
                     self.ground[y][x] = "x" 
                     break 
 
-    def get_clean(self,x,y):
-        self.ground[y][x]=" "
-        self.total_dirt-=1
-
+    def get_clean(self,agent,x,y):
+        if self.ground[y][x] == "x":
+            self.total_dirt -= 1
+            self.ground[y][x]=" "
+            agent.points+=1
+            
+        
     #no entiendo para que se usa  
     #def accept_action(self,action):
         

@@ -1,7 +1,5 @@
-from multiprocessing.connection import wait
 import Simulation
 import threading
-import random
 
 def writeInConsole(result):
     print("Tiempo nesesario: ",end="")
@@ -41,19 +39,24 @@ if __name__== "__main__":
     rateArr = [0.1, 0.2, 0.4, 0.8]
     arrSize = [2,4,8,16,32,64,128]
     #size = arrSize[random.randint(0,6)]
-    iter = 999
-    for j in range(0,7):
-        print(j)
-        size = arrSize[j]
+    #dirt_rate = rateArr[random.randint(0,3)]
+    iter = 10
+    for i in range(0,4):
         firstLine()
-        for i in range(0,iter):
-            dirt_rate = rateArr[random.randint(0,3)]
-            sim1 = threading.Thread(target = startSimulation, args = (size,dirt_rate,1))
-            sim1.start()
-            sim1.join()
+        dirt_rate = rateArr[i]
+        for j in range(0,7):
+            size = arrSize[j]
+            for k in range(0,iter):
+                sim1 = threading.Thread(target = startSimulation, args = (size,dirt_rate,1))
+                sim1.start()
+                sim1.join()
+
+    for i in range(0,4):
         firstLine()
-        for i in range(1,iter):
-            dirt_rate = rateArr[random.randint(0,3)]
-            sim2 = threading.Thread(target = startSimulation, args = (size,dirt_rate,2))
-            sim2.start()
-            sim2.join()
+        dirt_rate = rateArr[i]
+        for j in range(0,7):
+            size = arrSize[j]
+            for k in range(0,iter):
+                sim2 = threading.Thread(target = startSimulation, args = (size,dirt_rate,2))
+                sim2.start()
+                sim2.join()
