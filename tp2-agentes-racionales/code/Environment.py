@@ -1,5 +1,5 @@
 from math import trunc
-from AgentLocation import *
+from Agents.AgentLocation import *
 import random
 class Environment:
 

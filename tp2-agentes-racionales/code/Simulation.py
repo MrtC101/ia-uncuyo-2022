@@ -1,6 +1,6 @@
 from Environment import *
-from Agent import *
-from AgentAleatorio import *
+from Agents.Agent import *
+from Agents.AgentAleatorio import *
 import time
 import random
 
@@ -30,3 +30,11 @@ class Simulation:
 
     def get_Performance(self):
         return [1000-self.time,self.agent.points,self.env.total_dirt]
+
+    def writeInConsole(result):
+        print("Tiempo nesesario: ",end="")
+        print(result[0])
+        print("Cantidad de suciedad limpiada: ",end="")
+        print(result[1])
+        print("cantidad de suciedad faltante: ",end="")
+        print(result[2])    
