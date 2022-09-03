@@ -28,7 +28,8 @@ def startSimulation(resultSet,size,obstacles_rate,solutionType,option):
         if option == Option.NoGraphics:
             result = currSim.run(solutionType) 
         else:
-            result = currSim.runWithGraphic(solutionType)
+            currSim.runWithGraphic(solutionType)
+            return
         if isinstance(result,str):
             found = "No"
             size = 0
@@ -41,7 +42,6 @@ def startSimulation(resultSet,size,obstacles_rate,solutionType,option):
 if __name__== "__main__":
     start = time.time()
     #params
-    path="tp3-RandomEnvironment-resultSet.csv"
     iter = 30
     size = 100
     obstacles_rate = 0.1
@@ -54,7 +54,7 @@ if __name__== "__main__":
             sim = threading.Thread(target = startSimulation, args = (resultSet,size,obstacles_rate,simType,Option.NoGraphics))
             sim.start()
             sim.join()
-    else:
+    elif simType == Solution.RandomEnvironment:
         #diferent ecironment
         for j in range(0,iter*3):
             if j == 0:
@@ -66,14 +66,20 @@ if __name__== "__main__":
             sim = threading.Thread(target = startSimulation, args = (resultSet,size,obstacles_rate,solutionType,Option.NoGraphics))
             sim.start()
             sim.join()
+    elif simType == Solution.BFS:
+        startSimulation(resultSet,size,obstacles_rate,Solution.BFS,Option.WhithGraphics)
+    elif simType == Solution.DFS:
+        startSimulation(resultSet,size,obstacles_rate,Solution.DFS,Option.WhithGraphics)
+    elif simType == Solution.UniformCost:
+        startSimulation(resultSet,size,obstacles_rate,Solution.UniformCost,Option.WhithGraphics)
     #persistance
-    resultSet.makeCSV(path)
-    resultSet.dataAnalysis()
-    resultSet.plotBoxDiagram(x="Amount_of_explored_states",y="Algorithm",hue="Solution_was_found",col="Obstacles_rate")
-    resultSet.savePlot(fileName="BoxPlotFaster-RandomEnvironment")
-    resultSet.dataAnalysis()
-    resultSet.plotBoxDiagram(x="Solution_Lenght",y="Algorithm",hue="Solution_was_found",col="Obstacles_rate")
-    resultSet.savePlot(fileName="BoxPlotBestSolution-RandomEnvironment")
+    if simType == Solution.RandomEnvironment or simType == Solution.SameEnvironment:
+        resultSet.makeCSV(path="tp3-"+simType.name+"-resultSet.csv")
+        resultSet.dataAnalysis(AnalysisfileName="DatAnalysis.txt")
+        resultSet.plotBoxDiagram(x="Amount_of_explored_states",y="Algorithm",hue="Solution_was_found",col="Obstacles_rate")
+        resultSet.savePlot(fileName="BoxPlotFaster-"+simType.name)
+        resultSet.plotBoxDiagram(x="Solution_Lenght",y="Algorithm",hue="Solution_was_found",col="Obstacles_rate")
+        resultSet.savePlot(fileName="BoxPlotBestSolution-"+simType.name)
 
     end = time.time()
     print(end-start)

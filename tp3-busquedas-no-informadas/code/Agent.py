@@ -1,6 +1,7 @@
 import treelib as t
 import myQueue
 from Solution import Move
+import math
 
 class Agent:
     #resive como parametro un objeto Environment
@@ -52,28 +53,36 @@ class Agent:
         return False
 
     #se crean los hijos y añaden a la frontera según los movimientos posibles
-    def __think(self,state,frontier,exploredNodes,Tree,cost): #implementa las acciones a seguir
-        #Cada estado representa un par ordenado (x,y) que existe en la matriz de environment
-        newStateList =[self.__up(state),self.__down(state),self.__left(state),self.__right(state)]
-        for i in range(0,len(newStateList)):
-            newState = newStateList[i]
-            if self.__is_inside(newState) == True:
-                if self.__is_obstacle(newState) == False:
-                    if self.__already_explored(newState,exploredNodes) == False:
-                        lessCost = False
-                        frontierNode = self.__already_in_frontier(newState,frontier)
-                        if isinstance(frontier,myQueue.priorityQueue) and frontierNode != None:
-                                #verificar si newState Cost es < a cost en frontier
-                                oldcost = frontierNode.priority
-                                newcost = cost+1
-                                if oldcost > newcost:
-                                    lessCost=True
-                                    Tree.remove_node(frontierNode.data.identifier)
-                                    frontier.delete(frontierNode)
-                        if (lessCost and isinstance(frontier,myQueue.priorityQueue)) or frontierNode == None:
-                            #se crea el nodo y se agrega a la frontera y al arbol
-                            Tree.create_node(tag=Move(i).name,identifier=str(newState),parent=str(state),data=newState)
-                            frontier.add(Tree.get_node(str(newState)),cost+1)
+    def __think(self,treeNode,frontier,exploredNodes,Tree,cost,limit): #implementa las acciones a seguir
+        """ 
+        both this params are meaningless to BFS
+        :param cost: param for Uniform Cost search
+        :param limit: parar for limited DFS
+        """
+        # if de DFS
+        if(Tree.depth(treeNode) < limit):
+             #Cada estado representa un par ordenado (x,y) que existe en la matriz de environment
+            state = treeNode.data
+            newStateList =[self.__up(state),self.__down(state),self.__left(state),self.__right(state)]
+            for i in range(0,len(newStateList)):
+                newState = newStateList[i]
+                if self.__is_inside(newState) == True:
+                    if self.__is_obstacle(newState) == False:
+                        if self.__already_explored(newState,exploredNodes) == False:
+                            lessCost = False
+                            frontierNode = self.__already_in_frontier(newState,frontier)
+                            if isinstance(frontier,myQueue.priorityQueue) and frontierNode != None:
+                                    #code for Uniform cost Search
+                                    oldcost = frontierNode.priority
+                                    newcost = cost+1
+                                    if oldcost > newcost:
+                                        lessCost=True
+                                        Tree.remove_node(frontierNode.data.identifier)
+                                        frontier.delete(frontierNode)
+                            if (lessCost and isinstance(frontier,myQueue.priorityQueue)) or frontierNode == None:
+                                #se crea el nodo y se agrega a la frontera y al arbol
+                                Tree.create_node(tag=Move(i).name,identifier=str(newState),parent=str(state),data=newState)
+                                frontier.add(Tree.get_node(str(newState)),cost+1) # costo de Uniform Cost Search
                   
     def __createMovesList(self,T,GoalNode):
         movesList = [GoalNode]
@@ -84,7 +93,7 @@ class Agent:
             parentID = T.ancestor(currNode.identifier)
         return movesList
 
-    def __exploringFrontier(self,Tree,frontier,explored):
+    def __exploringFrontier(self,Tree,frontier,explored,limit):
         while frontier.size>0:
             node = frontier.get()
             treeNode = node.data
@@ -93,7 +102,7 @@ class Agent:
                 return self.__createMovesList(Tree,treeNode)
             else:
                 cost = node.priority
-                self.__think(treeNode.data,frontier,explored,Tree,cost)
+                self.__think(treeNode,frontier,explored,Tree,cost,limit)
             explored.append(treeNode)
             self.__addStatesVisitedAmount()
             del node
@@ -107,10 +116,10 @@ class Agent:
         frontier.add(T.get_node(str(Initial_Pos)),0)
         return T
 
-    def __getSolution(self,frontier):
+    def __getSolution(self,frontier,limit):
         T = self.__startTreeAndFrontier(frontier)
         explored = myQueue.PythonList()
-        solution = self.__exploringFrontier(T,frontier,explored)
+        solution = self.__exploringFrontier(T,frontier,explored,limit)
         del frontier
         del explored
         del T
@@ -119,16 +128,19 @@ class Agent:
     def solveByBFS(self):
         self.resetStateVisitedAmount()
         frontier = myQueue.Queue()
-        return self.__getSolution(frontier)
+        limit= self.env.sizes[0]+self.env.sizes[1] # el limite mas alto posible
+        return self.__getSolution(frontier,limit)
 
     def solveByDFS(self):
         self.resetStateVisitedAmount()
         frontier = myQueue.Stack()
-        return self.__getSolution(frontier)
-
+        limit = math.trunc(self.env.sizes[0]*2/3)
+        return self.__getSolution(frontier,limit)
+    
     def solveByUniformCost(self):
         self.resetStateVisitedAmount()
         frontier = myQueue.priorityQueue()
-        return self.__getSolution(frontier)
-        
+        limit= self.env.sizes[0]+self.env.sizes[1] # el limite mas alto posible
+        return self.__getSolution(frontier,limit)
+
 #print(str(explored.hashTable),end="\n\n\n")

@@ -9,12 +9,16 @@ class Results:
         self.resultSet = pd.DataFrame(columns=head)
         self.path = None
     
-    def dataAnalysis(self):
-        print("Mean:")
-        print(str(self.getMean()))
-        print("Starndar Deviation:")
-        print(str(self.getStandarDeviation()))
-
+    def dataAnalysis(self,AnalysisfileName):
+        file = open(AnalysisfileName,'w')
+        try:
+            file.write("Mean:\n")
+            file.write(str(self.getMean())+"\n")
+            file.write("Starndar Deviation:\n")
+            file.write(str(self.getStandarDeviation())+"\n")
+        finally:
+            file.close()
+        
     def getMean(self):
         return self.resultSet.mean(axis='index',numeric_only=True)
 

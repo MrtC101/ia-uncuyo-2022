@@ -2,6 +2,22 @@
 
 # Resultados:
 
+## Mediana y Desviación Estandar
+### **Entornos Aleatorios**
+#### Mean:
+Solution_Lenght                52.577778  
+Amount_of_explored_states    3481.988889  
+#### Starndar Deviation:
+Solution_Lenght              3.613616e+01  
+Amount_of_explored_states    2.557184e+03  
+### **un mismo Entorno**
+#### Mean:
+Solution_Lenght                52.688889  
+Amount_of_explored_states    3566.300000  
+#### Starndar Deviation:
+Solution_Lenght              4.643625e+01  
+Amount_of_explored_states    2.918678e+03  
+
 ## Comparando el tamaño de las *Soluciones*
 
 ### Comparando el tamaño de las *Soluciones* por Algoritmo en un **mismo Entorno**:

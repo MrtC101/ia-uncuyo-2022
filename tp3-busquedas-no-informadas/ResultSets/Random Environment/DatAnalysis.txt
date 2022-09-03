@@ -1,0 +1,10 @@
+Mean:
+Obstacles_rate                  0.100000
+Solution_Lenght                52.577778
+Amount_of_explored_states    3481.988889
+dtype: float64
+Starndar Deviation:
+Obstacles_rate               2.775558e-17
+Solution_Lenght              3.613616e+01
+Amount_of_explored_states    2.557184e+03
+dtype: float64
