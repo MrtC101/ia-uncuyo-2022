@@ -8,6 +8,9 @@ class Agent:
         self.env = env 
         self.statesVisitedAmount = 0
 
+    def resetStateVisitedAmount(self):
+        self.statesVisitedAmount = 0
+
     def getStatesVisitedAmount(self):
         return self.statesVisitedAmount
 
@@ -30,24 +33,12 @@ class Agent:
         newState = (state[0]+1,state[1])
         return newState
 
-    #def perspective(self): #verifica el entorno
     def __already_in_frontier(self,state,frontier):
-        if isinstance(frontier,myQueue.priorityQueue):
-            return frontier.searchWithHash(state)
-        currentNode = frontier.head
-        if currentNode != None:
-            while currentNode!=None:
-                frontiered = currentNode.data.data
-                if state == frontiered:
-                    return currentNode
-                currentNode=currentNode.nextNode
-        return None
+        return frontier.searchWithHash(state)
 
     def __already_explored(self,state,exploredList):
-        for i in range(0,len(exploredList)):
-            explored = exploredList[i].data
-            if state == explored:
-                return True
+        if exploredList.searchWithHash(state) != None:
+            return True
         return False
 
     def __is_obstacle(self,state):
@@ -61,7 +52,7 @@ class Agent:
         return False
 
     #se crean los hijos y añaden a la frontera según los movimientos posibles
-    def think(self,state,frontier,exploredNodes,Tree,cost): #implementa las acciones a seguir
+    def __think(self,state,frontier,exploredNodes,Tree,cost): #implementa las acciones a seguir
         #Cada estado representa un par ordenado (x,y) que existe en la matriz de environment
         newStateList =[self.__up(state),self.__down(state),self.__left(state),self.__right(state)]
         for i in range(0,len(newStateList)):
@@ -70,8 +61,6 @@ class Agent:
                 if self.__is_obstacle(newState) == False:
                     if self.__already_explored(newState,exploredNodes) == False:
                         lessCost = False
-                        #agregar hashtable
-                        frontierNode = None
                         frontierNode = self.__already_in_frontier(newState,frontier)
                         if isinstance(frontier,myQueue.priorityQueue) and frontierNode != None:
                                 #verificar si newState Cost es < a cost en frontier
@@ -86,7 +75,7 @@ class Agent:
                             Tree.create_node(tag=Move(i).name,identifier=str(newState),parent=str(state),data=newState)
                             frontier.add(Tree.get_node(str(newState)),cost+1)
                   
-    def createMovesList(self,T,GoalNode):
+    def __createMovesList(self,T,GoalNode):
         movesList = [GoalNode]
         parentID = T.ancestor(GoalNode.identifier)
         while parentID != None:
@@ -95,41 +84,51 @@ class Agent:
             parentID = T.ancestor(currNode.identifier)
         return movesList
 
-    def exploringFrontier(self,Tree,frontier,explored):
+    def __exploringFrontier(self,Tree,frontier,explored):
         while frontier.size>0:
-            #print(str(frontier.hashTable),end="\n\n\n")
             node = frontier.get()
-            treeNode=node.data
-            cost=node.priority
+            treeNode = node.data
             if self.env.ground[treeNode.data[0]][treeNode.data[1]] == "><":
                 #devolver la lista de movimientos
-                return self.createMovesList(Tree,treeNode)
+                return self.__createMovesList(Tree,treeNode)
             else:
-                self.think(treeNode.data,frontier,explored,Tree,cost)
+                cost = node.priority
+                self.__think(treeNode.data,frontier,explored,Tree,cost)
             explored.append(treeNode)
-            #Tree.show()
-            #print(explored)
             self.__addStatesVisitedAmount()
+            del node
         return "No Solution"
 
-    def createTree(self,frontier):
-        tree = t.Tree()
-        location = self.env.initPos
-        tree.create_node(tag="Initial_Pos",identifier=str(location),parent=None,data=location)
-        frontier.add(tree.get_node(str(location)),0)
-        return tree
+    def __startTreeAndFrontier(self,frontier):
+        Initial_Pos = self.env.initPos
+        T = t.Tree()
+        T.create_node(tag="Initial_Pos",identifier=str(Initial_Pos),parent=None,data=Initial_Pos)
+        #0 is priority 
+        frontier.add(T.get_node(str(Initial_Pos)),0)
+        return T
+
+    def __getSolution(self,frontier):
+        T = self.__startTreeAndFrontier(frontier)
+        explored = myQueue.PythonList()
+        solution = self.__exploringFrontier(T,frontier,explored)
+        del frontier
+        del explored
+        del T
+        return solution
 
     def solveByBFS(self):
+        self.resetStateVisitedAmount()
         frontier = myQueue.Queue()
-        T = self.createTree(frontier)
-        return self.exploringFrontier(T,frontier,explored=[])
+        return self.__getSolution(frontier)
 
     def solveByDFS(self):
+        self.resetStateVisitedAmount()
         frontier = myQueue.Stack()
-        T = self.createTree(frontier)
-        return self.exploringFrontier(T,frontier,explored=[])
+        return self.__getSolution(frontier)
 
     def solveByUniformCost(self):
+        self.resetStateVisitedAmount()
         frontier = myQueue.priorityQueue()
-        T = self.createTree(frontier)
-        return self.exploringFrontier(T,frontier,explored=[])
+        return self.__getSolution(frontier)
+        
+#print(str(explored.hashTable),end="\n\n\n")

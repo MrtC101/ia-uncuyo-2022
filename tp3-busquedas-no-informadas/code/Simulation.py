@@ -16,6 +16,30 @@ class Simulation:
         self.env = Environment(size,size,agentX,agentY,goalX,goalY,obstacles_rate)
         self.agent = Agent(self.env)
     
+    def comparePerformance(self,per1,per2):
+        if per1 < per2:
+            return True
+        return False
+
+    def compareSolution(self,sol1,sol2):
+        if isinstance(sol1,str):
+            return False
+        if isinstance(sol2,str):
+            return False
+        if len(sol1)<len(sol2):
+            return True
+        return False
+
+    def runAll(self):
+        result = []
+        result.append(self.agent.solveByBFS())
+        result.append(self.agent.getStatesVisitedAmount())
+        result.append(self.agent.solveByDFS())
+        result.append(self.agent.getStatesVisitedAmount())
+        result.append(self.agent.solveByUniformCost())
+        result.append(self.agent.getStatesVisitedAmount())
+        return result
+        
     def run(self,solutionType):
         if solutionType == Solution.BFS:
             solution = self.agent.solveByBFS()

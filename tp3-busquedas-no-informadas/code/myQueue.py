@@ -2,17 +2,57 @@ class Node:
     previousNode = None
     nextNode = None
     data = None
-    priority = None
+    priority = 0
 
-class Stack:
+    def __init__(self,*args):
+        """
+        :param data: First param used from data
+        :param priority: Second param and not nesesari used for priority queueu
+        """
+        if len(args)== 1:
+            self.data = args[0]
+        elif len(args) == 2:
+            self.data = args[0]
+            self.priority = args[1]
+    """
+    def __init__(self,data):
+        self.data = data
+
+    def __init__(self,data,priority):
+        self.data = data
+        self.priority = priority
+
+    """    
+    def __del__(self):
+        None
+
+class List:
     head = None
     lastNode = None
     size = 0
-            
-    def add(self,item,priority):
-        newNode = Node()
-        newNode.data=item
-        newNode.priority = priority
+
+    def __init__(self):
+        self.hashTable={}
+    
+    def __del__(self):
+        None
+
+    def searchWithHash(self,data):
+        """
+        Search data on List in an internal hashtable.
+        """
+        try:
+            return self.hashTable[str(data)] 
+        except Exception:
+            return None
+
+    def add(self,item,priority=0):
+        """
+        Add the item to the List or Queue.
+        :param priority: Is not need, and don't matter when adding items to the List.
+        """
+        newNode = Node(item)
+        self.hashTable[str(item.data)] = newNode
         if self.head == None:
             self.head = newNode
             self.lastNode = newNode
@@ -23,7 +63,18 @@ class Stack:
         self.size+=1
         return self.size
 
+class Stack(List):
+
+    def __init__(self):
+        super().__init__()
+
+    def __del__(self):
+        None
+
     def get(self):
+        """
+        Returns the Last item added.
+        """
         if self.head==None:
             return None
         node = self.head
@@ -35,27 +86,21 @@ class Stack:
             self.head.previousNode=None
             node.nextNode=None
         self.size-=1
+        del self.hashTable[str(node.data.data)]
         return node
 
-class Queue:
-    head = None
-    lastNode = None
-    size = 0
-            
-    def add(self,item,priority):
-        newNode = Node()
-        newNode.data=item
-        newNode.priority = priority
-        if self.head == None:
-            self.head = newNode
-            self.lastNode = newNode
-        else:
-            self.head.previousNode = newNode
-            newNode.nextNode = self.head
-            self.head = newNode
-        self.size+=1
+class Queue(List):
+
+    def __init__(self):
+        super().__init__()
+
+    def __del__(self):
+        None
 
     def get(self):
+        """
+        Returns the First item added.
+        """
         if self.head==None:
             return None
         node = self.lastNode
@@ -67,21 +112,24 @@ class Queue:
             self.lastNode.nextNode = None
             node.previousNode = None
         self.size-=1
+        del self.hashTable[str(node.data.data)]
         return node
 
-class priorityQueue:
-    head = None
-    lastNode = None
-    size = 0
+class priorityQueue(List):
 
     def __init__(self):
-        self.hashTable={}
+        super().__init__()
+        
+    def __del__(self):
+        None
 
+    #Override
     def add(self,item,priority):
-        newNode = Node()
-        newNode.data=item
-        newNode.priority = priority
-        self.hashTable[str(item.data)]=newNode
+        """
+        Add an item to a Queue with priority.
+        """
+        newNode = Node(item,priority)
+        self.hashTable[str(item.data)] = newNode
         if self.head == None:
             self.head = newNode
             self.lastNode = newNode
@@ -130,6 +178,9 @@ class priorityQueue:
         return node
     
     def delete(self,node):
+        """
+        Deletes the given Node.
+        """
         if node == self.head:
             self.head = node.nextNode
             node.nextNode.previousNode = None
@@ -146,11 +197,25 @@ class priorityQueue:
             node.previousNode=None
         self.size-=1
         del self.hashTable[str(node.data.data)]
+        del node
         return self.size
+    
+
+class PythonList:
+
+    def __init__(self):
+        self.list = []
+        self.hashTable={}
+    
+    def __del__(self):
+        None
+
+    def append(self,TreeNode):
+        self.list.append(TreeNode)
+        self.hashTable[str(TreeNode.data)] = len(self.list)-1
     
     def searchWithHash(self,data):
         try:
-            r = self.hashTable[str(data)]
-            return r
+            return self.list[self.hashTable[str(data)]] 
         except Exception:
             return None
