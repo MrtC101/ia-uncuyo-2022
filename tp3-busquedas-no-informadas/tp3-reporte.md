@@ -2,7 +2,7 @@
 
 # Resultados:
 
-## Mediana y Desviación Estandar
+## Media Aritmetica y Desviación Estandar
 ### **Entornos Aleatorios**
 #### Mean:
 Solution_Lenght                52.577778  
