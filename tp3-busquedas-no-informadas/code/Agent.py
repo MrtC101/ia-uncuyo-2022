@@ -128,15 +128,21 @@ class Agent:
     def solveByBFS(self):
         self.resetStateVisitedAmount()
         frontier = myQueue.Queue()
-        limit= self.env.sizes[0]+self.env.sizes[1] # el limite mas alto posible
+        limit= self.env.sizes[0]*self.env.sizes[1] # el limite mas alto posible
         return self.__getSolution(frontier,limit)
 
     def solveByDFS(self):
         self.resetStateVisitedAmount()
         frontier = myQueue.Stack()
-        limit = math.trunc(self.env.sizes[0]*2/3)
+        limit = self.env.sizes[0]*self.env.sizes[1] 
         return self.__getSolution(frontier,limit)
     
+    def solveByDFSLimited(self):
+        self.resetStateVisitedAmount()
+        frontier = myQueue.Stack()
+        limit = math.trunc(self.env.sizes[0]*2/3)
+        return self.__getSolution(frontier,limit)
+
     def solveByUniformCost(self):
         self.resetStateVisitedAmount()
         frontier = myQueue.priorityQueue()

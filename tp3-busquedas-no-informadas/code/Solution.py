@@ -4,8 +4,9 @@ class Solution(IntEnum):
     BFS = 1
     UniformCost = 2
     DFS = 3
-    SameEnvironment = 4
-    RandomEnvironment = 5
+    DFSLimited = 4
+    SameEnvironment = 5
+    RandomEnvironment = 6
 
 class Move(IntEnum):
     UP = 0

@@ -36,6 +36,8 @@ class Simulation:
         result.append(self.agent.getStatesVisitedAmount())
         result.append(self.agent.solveByDFS())
         result.append(self.agent.getStatesVisitedAmount())
+        result.append(self.agent.solveByDFSLimited())
+        result.append(self.agent.getStatesVisitedAmount())
         result.append(self.agent.solveByUniformCost())
         result.append(self.agent.getStatesVisitedAmount())
         return result
@@ -45,6 +47,8 @@ class Simulation:
             solution = self.agent.solveByBFS()
         elif solutionType == Solution.DFS:
             solution = self.agent.solveByDFS()
+        elif solutionType == Solution.DFSLimited:
+            solution = self.agent.solveByDFSLimited()
         elif solutionType == Solution.UniformCost:
             solution = self.agent.solveByUniformCost()
         else:

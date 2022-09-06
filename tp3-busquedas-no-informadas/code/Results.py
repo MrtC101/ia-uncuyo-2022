@@ -59,6 +59,20 @@ class Results:
         sns.catplot(x=x,y=y,hue=hue,col=col,kind="box",data=self.resultSet)
         plt.show(block = False)
 
+    def plotBoxDiagramSubgroup(self,x,y,hue,col,subgroup):
+        plt.show(block = False)
+        sns.catplot(x=x,y=y,hue=hue,col=col,kind="box",data=subgroup)
+        plt.show(block = False)
+
     def savePlot(self,fileName):
         plt.savefig( fileName + ".png")
         
+    """
+    Extraer un subconjunto
+    dt = rs.Results(["Solution_was_found","Algorithm","Obstacles_rate","Solution_Lenght","Amount_of_explored_states"])
+    dt.loadCSV("tp3-SameEnvironment-resultSet.csv")
+    subgroup = dt.resultSet
+    subgroup = subgroup[subgroup["Algorithm"] != "DFS"]
+    dt.plotBoxDiagramSubgroup(x="Solution_Lenght",y="Algorithm",hue="Solution_was_found",col="Obstacles_rate",subgroup=subgroup)
+    dt.savePlot(fileName="BoxPlotBestSolution-three")
+    """

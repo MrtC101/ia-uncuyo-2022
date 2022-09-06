@@ -3,9 +3,8 @@ import Results as rs
 from Solution import Solution,Option
 import time
 import threading
-
-
 def startSimulation(resultSet,size,obstacles_rate,solutionType,option):
+    
     currSim = Simulation(size,obstacles_rate)
     if solutionType == Solution.SameEnvironment:
         result = currSim.runAll()
@@ -21,6 +20,8 @@ def startSimulation(resultSet,size,obstacles_rate,solutionType,option):
             elif i==2:
                 algo = Solution.DFS
             elif i==4:
+                algo = Solution.DFSLimited
+            elif i==6:
                 algo = Solution.UniformCost
             register = [found, algo.name,obstacles_rate,size,result[i+1]]
             resultSet.addRegister(register)
@@ -39,13 +40,14 @@ def startSimulation(resultSet,size,obstacles_rate,solutionType,option):
         register = [found, solutionType.name,obstacles_rate,len(result),currSim.get_Performance()]
         resultSet.addRegister(register)
 
+#Trada debido al DFS
 if __name__== "__main__":
     start = time.time()
     #params
     iter = 30
     size = 100
     obstacles_rate = 0.1
-    simType = Solution.RandomEnvironment
+    simType = Solution.SameEnvironment
 
     resultSet = rs.Results(["Solution_was_found","Algorithm","Obstacles_rate","Solution_Lenght","Amount_of_explored_states"])
     if simType == Solution.SameEnvironment:
@@ -70,6 +72,8 @@ if __name__== "__main__":
         startSimulation(resultSet,size,obstacles_rate,Solution.BFS,Option.WhithGraphics)
     elif simType == Solution.DFS:
         startSimulation(resultSet,size,obstacles_rate,Solution.DFS,Option.WhithGraphics)
+    elif simType == Solution.DFSLimited:
+        startSimulation(resultSet,size,obstacles_rate,Solution.DFSLimited,Option.WhithGraphics)
     elif simType == Solution.UniformCost:
         startSimulation(resultSet,size,obstacles_rate,Solution.UniformCost,Option.WhithGraphics)
     #persistance
@@ -83,3 +87,4 @@ if __name__== "__main__":
 
     end = time.time()
     print(end-start)
+    
