@@ -1,7 +1,7 @@
-## **Martín Cogo Belver**  
-![][Logo de universidad]
+## **Martín Cogo Belver**
+
+!["Logo"](UncuyoIngenieríaLogo.jpg)
 ---
+
 # Inteligencia Artificial I
 ***Trabajos Practicos del año 2022***
-
-[Logo de universidad]:"UncuyoIngenieríaLogo.jpg"
