@@ -1,5 +1,6 @@
+from re import X
 import treelib as t
-from random import randint,choices
+from random import randint,choices, random
 from enums import Move
 import math
 
@@ -18,41 +19,44 @@ class Agent:
     def __addStatesVisitedAmount(self):
         self.statesVisitedAmount+=1
 
-    def __getNextPos(self,tuple,dir):
-        if(dir==Move.UPDiag):
-            return (tuple[0]-1,tuple[1]+1);
-        elif(dir==Move.LEFT):
-            return (tuple[0]-1,tuple[1]);
-        elif(dir==Move.DOWNDiag):
-            return (tuple[0]-1,tuple[1]-1);
-    
+    def __getNextPos(self,queenPos,direction,currX):
+        if(direction==Move.UPDiag):
+            return (currX,queenPos[1]+(queenPos[0]-currX))
+        elif(direction==Move.LEFT):
+            return (currX,queenPos[1])
+        elif(direction==Move.DOWNDiag):
+            return (currX,queenPos[1]-(queenPos[0]-currX))
+
     def __is_inside(self,state):
         if state[0] < self.env.size and state[0]>-1 and state[1] < self.env.size and state[1]>-1:
             return True
         return False
-    
+    #
     def __checkQueen(self,state):
         checkedNum = 0
         hashTable = {}
         moveArr = {Move.UPDiag,Move.LEFT,Move.DOWNDiag}
+        checked = {}
+        #por cada reina
         for i in range(0,len(state)):
-            queenPos = (i,state[i]);
-            hashTable[str(queenPos)] = (True,False);
-            for move in moveArr: 
-                checked = False
-                nextPos = self.__getNextPos(queenPos,move)
-                while self.__is_inside(nextPos) and checked == False:
-                    if hashTable.get(str(nextPos)) == None: 
-                        hashTable[str(nextPos)] = (False,False)
-                    elif hashTable[str(nextPos)][0]==True:
-                        if(hashTable[str(queenPos)][1]==False):
-                            checkedNum += 1
-                            hashTable[str(queenPos)] = (True,True)
-                        if(hashTable[str(nextPos)][1] == False):
-                            checkedNum += 1
-                            hashTable[str(nextPos)] = (True,True)
-                        checked == True
-                    nextPos = self.__getNextPos(nextPos,move)
+            for move in moveArr:
+                checked[move.name] = False
+            queenPos = (i,state[i])
+            hashTable[str(queenPos)] = False
+            #revisar las columnas anteriores
+            for j in range(i-1,-1,-1):
+                for move in moveArr: 
+                    if(checked[move.name]==False):
+                        nextPos = self.__getNextPos(queenPos,move,j)
+                        if self.__is_inside(nextPos):
+                            if hashTable.get(str(nextPos)) != None:
+                                if(hashTable[str(queenPos)] == False):
+                                    checkedNum += 1
+                                    hashTable[str(queenPos)] = True
+                                if(hashTable[str(nextPos)] == False):
+                                    checkedNum += 1
+                                    hashTable[str(nextPos)] = True
+                                checked[move.name] = True
         return checkedNum
 #----------------------------------------------------------------------#
     def __findNeighbor(self,state):
@@ -87,17 +91,16 @@ class Agent:
         val = self.__checkQueen(Neightbor)
         return (Neightbor,val)
     
-    def __schedule(self,t):
-        return 1/t
+    def __schedule(self,stateVistitedAmount,stateScore):
+        return stateScore/stateVistitedAmount()
 
-    def simmulated_annealing(self):
+    def simulated_annealing(self):
         initState = list(self.env.table)
         currentState = (initState,self.__checkQueen(initState))
-        t = 0
         while True:
-            t+=1
-            T = self.__schedule(t)
-            if(T<0.03):
+            self.__addStatesVisitedAmount()
+            T = self.__schedule(self.getStatesVisitedAmount,currentState[1])
+            if(T < 0.003):
                 return currentState
             nextState = self.__findRandomNeighbor(currentState);
             E = nextState[1]-currentState[1] 
@@ -110,8 +113,16 @@ class Agent:
                 a=choices([True,False],(p,np))
                 if(a[0]==True):
                    currentState = nextState
-            self.__addStatesVisitedAmount()
 #------------------------------------------------------------------------#
     def genetic_algorithm(self):
         state = None
+        while(state[1]>0 and self.getStatesVisitedAmount()<100):
+            new_population = []
+            for i in range(1,200):
+                x =
+                y =
+                child =
+                if():
+                    mutate(state);
+                new_population.append(state)
         return state

@@ -1,5 +1,6 @@
 from Environment import *
 from Agent import *
+import time
 from enums import Solution
 
 class Simulation:
@@ -8,21 +9,21 @@ class Simulation:
         self.env = Environment(size)
         self.agent = Agent(self.env)
 
-    def printSolution(self,solutionTuple):
-        print("Cantidad de Estados Visitados:",solutionTuple[1])
-        print("Cantidad de reinas amenazadas",solutionTuple[0][1])
+    def printSolution(self,solution):
+        print("Cantidad de Estados Visitados: ",self.agent.getStatesVisitedAmount())
+        print("Cantidad de reinas amenazadas: ",solution[1])
         print("Tablero Inicial:")
         self.env.print_enviroment()
         print("Tablero Solicion:")
-        self.env.print_enviroment(solutionTuple[0][0])
+        Environment.print_enviromentExtern(solution[0])
     
     def run(self,solutionType):
         if solutionType == Solution.HILL_CLIMBING:
             solution = self.agent.hill_climbing()
-        elif solutionType == Solution.SIMM_ANNEALING:
-            solution = self.agent.simmulated_annealing()
+        elif solutionType == Solution.SIM_ANNEALING:
+            solution = self.agent.simulated_annealing()
         elif solutionType == Solution.GENETIC:
-            solution = self.agent.simmulated_annealing()
+            solution = self.agent.genetic_algorithm()
         else:
             raise Exception("No type solution was selected.")
         return solution
@@ -31,9 +32,9 @@ class Simulation:
         resultArr = []
         for sol in Solution:
             self.resetStateVisitedAmount()
-            startTime = Time.time()
+            startTime = time.time()
             state = self.run(sol)
-            endTime = Time.time()
+            endTime = time.time()
             resultArr.append(state[0],state[1],self.getStatesVisitedAmount(),endTime-startTime)
         return resultArr
     
@@ -42,7 +43,7 @@ class Simulation:
         solution = currSim.run(solutionType)
         currSim.printSolution(solution)
 
-    def startSimulation(resultSet,size,iterNumber):
+    def startSimulationThread(resultSet,size,iterNumber):
         for i in range(0,iterNumber):
             currSim = Simulation(size)
             resultArr = currSim.runAll()

@@ -20,7 +20,7 @@ class Environment:
                     print("|  ",end="")
             print("|")
 
-    def print_enviroment(table):
+    def print_enviromentExtern(table):
         size = len(table)
         for i in range (size-1,-1,-1):
             for j in range (0,size):

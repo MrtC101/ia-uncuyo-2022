@@ -2,7 +2,7 @@ from enum import IntEnum
 
 class Solution(IntEnum):
     HILL_CLIMBING = 1 
-    SIMM_ANNEALING = 2
+    SIM_ANNEALING = 2
     GENETIC = 3
     RunAll = 4
 

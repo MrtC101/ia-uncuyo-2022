@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 class Results:
     index=0
-    
+
     def __init__(self,head):
         self.resultSet = pd.DataFrame(columns=head)
         self.path = None
@@ -12,10 +12,15 @@ class Results:
     def dataAnalysis(self,AnalysisfileName):
         file = open(AnalysisfileName,'w')
         try:
+            file.write("===\nData Analysis\n")
             file.write("Mean:\n")
             file.write(str(self.getMean())+"\n")
             file.write("Starndar Deviation:\n")
             file.write(str(self.getStandarDeviation())+"\n")
+            file.write("Percentage of optimal solution: ")
+            solutions = self.resultSet[self.resultSet["Threatened_Queens"]==0].size()
+            all = self.resultSet.size()
+            file.write(str(solutions/all) + "\n")
         finally:
             file.close()
         
