@@ -19,6 +19,14 @@ class Environment:
                 else:
                     print("|  ",end="")
             print("|")
-        print()
-        print("====================================")
+
+    def print_enviroment(table):
+        size = len(table)
+        for i in range (size-1,-1,-1):
+            for j in range (0,size):
+                if(table[j]==i):
+                    print("|<>",end="")
+                else:
+                    print("|  ",end="")
+            print("|")
                 

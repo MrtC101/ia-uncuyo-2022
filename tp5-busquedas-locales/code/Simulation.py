@@ -1,7 +1,6 @@
 from Environment import *
 from Agent import *
 from enums import Solution
-import random
 
 class Simulation:
 
@@ -9,50 +8,46 @@ class Simulation:
         self.env = Environment(size)
         self.agent = Agent(self.env)
 
-
-    def runAll(self):
-        result = []
-        result.append(self.agent.hill_climbing())
-        result.append(self.agent.getStatesVisitedAmount())
-        result.append(self.agent.simmulated_annealing())
-        result.append(self.agent.getStatesVisitedAmount())
-        return result
-
+    def printSolution(self,solutionTuple):
+        print("Cantidad de Estados Visitados:",solutionTuple[1])
+        print("Cantidad de reinas amenazadas",solutionTuple[0][1])
+        print("Tablero Inicial:")
+        self.env.print_enviroment()
+        print("Tablero Solicion:")
+        self.env.print_enviroment(solutionTuple[0][0])
+    
     def run(self,solutionType):
         if solutionType == Solution.HILL_CLIMBING:
             solution = self.agent.hill_climbing()
-        if solutionType == Solution.SIMM_ANNEALING:
+        elif solutionType == Solution.SIMM_ANNEALING:
+            solution = self.agent.simmulated_annealing()
+        elif solutionType == Solution.GENETIC:
             solution = self.agent.simmulated_annealing()
         else:
-            raise Exception("No posible solution was selected.")
+            raise Exception("No type solution was selected.")
         return solution
+
+    def runAll(self):
+        resultArr = []
+        for sol in Solution:
+            self.resetStateVisitedAmount()
+            startTime = Time.time()
+            state = self.run(sol)
+            endTime = Time.time()
+            resultArr.append(state[0],state[1],self.getStatesVisitedAmount(),endTime-startTime)
+        return resultArr
     
-    def printSolution(self,arr):
-        if isinstance(arr,str):
-            print(arr)
-        else:
-            print("[",end="")
-            for i in range(0,len(arr)):
-                print(arr[i],end="")
-                if i != len(arr)-1:
-                    print("",end=",")
-            print("]")
-        ##
-            for i in range (len(arr[0])-1,-1,-1):
-                for j in range (0,len(arr[0])):
-                    if(arr[0][j]==i):
-                        print("|<>",end="")
-                    else:
-                        print("|  ",end="")
-                print("|")
-            print()
+    def startSimulation(size,solutionType):
+        currSim = Simulation(size)
+        solution = currSim.run(solutionType)
+        currSim.printSolution(solution)
 
-    def runWithGraphic(self,solutionType):
-        self.env.print_enviroment()
-        solution = self.run(solutionType)
-        print(self.get_Performance())
-        self.printSolution(solution)
+    def startSimulation(resultSet,size,iterNumber):
+        for i in range(0,iterNumber):
+            currSim = Simulation(size)
+            resultArr = currSim.runAll()
+            for i in range(0,len(resultArr)):
+                register = [Solution(i).name,size,resultArr[i][1],resultArr[i][2],resultArr[i][3]]
+                resultSet.addRegister(register)
 
-
-    def get_Performance(self):
-        return self.agent.getStatesVisitedAmount()
+    

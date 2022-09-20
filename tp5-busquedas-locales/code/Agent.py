@@ -54,7 +54,7 @@ class Agent:
                         checked == True
                     nextPos = self.__getNextPos(nextPos,move)
         return checkedNum
-
+#----------------------------------------------------------------------#
     def __findNeighbor(self,state):
         bestState= (state[0].copy(),state[1]);
         for i in range(0,len(state[0])):
@@ -69,7 +69,6 @@ class Agent:
         return bestState
 
     def hill_climbing(self):
-        self.resetStateVisitedAmount()
         initState = list(self.env.table)
         currentState = (initState,self.__checkQueen(initState))
         max = self.env.size*2
@@ -79,7 +78,7 @@ class Agent:
                 return currentState
             currentState = nextState
             self.__addStatesVisitedAmount()
-        
+#------------------------------------------------------------------------#
     def __findRandomNeighbor(self,state):
         Neightbor = state[0].copy()
         i = randint(0,len(Neightbor)-1)
@@ -92,7 +91,6 @@ class Agent:
         return 1/t
 
     def simmulated_annealing(self):
-        self.resetStateVisitedAmount()
         initState = list(self.env.table)
         currentState = (initState,self.__checkQueen(initState))
         t = 0
@@ -113,7 +111,7 @@ class Agent:
                 if(a[0]==True):
                    currentState = nextState
             self.__addStatesVisitedAmount()
-    
+#------------------------------------------------------------------------#
     def genetic_algorithm(self):
         state = None
         return state
