@@ -1,5 +1,6 @@
 from Simulation import Simulation
 import Results as rs
+import time
 from enums import Solution
 import threading
 
@@ -41,5 +42,6 @@ if __name__== "__main__":
         Simulation.startSimulation(problemSize,Solution.SIM_ANNEALING)
     elif simType == Solution.GENETIC:
         Simulation.startSimulation(problemSize,Solution.GENETIC)
-        
+    end = time.time()
+    print(end-start)    
     

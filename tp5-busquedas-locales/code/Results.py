@@ -10,27 +10,50 @@ class Results:
         self.resultSet = pd.DataFrame(columns=head)
         self.path = None
     
+    def serieString(self,serie):
+        values = serie.array
+        axes = serie.axes[0]
+        rep = "<ul>"
+        for i in range(1,len(values)):
+            rep +="<li>"+ axes[i] +" = "+ str(values[i]) + "\n\n"+ "</li>"
+        return rep + "</ul>"
+    
     def dataAnalysis(self,AnalysisfileName):
         all = self.resultSet.size
-        solType = pd.unique(self.resultSet["Algorithm"])
-        solSubGroup = self.resultSet.groupby("Algorithm") 
-        for j in range(0,len(solType)):
-            solSub = solSubGroup.get_group(solType[j])
-            sizeGroups = pd.unique(solSub["Size"])
-            sizeSubGroup = solSub.groupby("Size")
-            for i in range(0,len(sizeGroups)):
-                subgroup = sizeSubGroup.get_group(sizeGroups[i])
-                with open(AnalysisfileName,'a') as file:
-                    file.write("===\nData Analysis\n")
-                    file.write("Mean:\n")
-                    file.write(str(subgroup.mean(axis='index',numeric_only=True))+"\n")
-                    file.write("Starndar Deviation:\n")
-                    file.write(str(subgroup.std(axis='index',ddof=0,numeric_only=True))+"\n")
-                    file.write("Percentage of optimal solution: ")
-                    solutions =  subgroup[subgroup["Threatened_Queens"]==0]
-                    solutionNumber = solutions.size
-                    file.write(str(solutionNumber/all) + "\n")
-            
+        table = "<table><caption>Results</caption>"
+        table += "<thead>"
+        table +=    "<tr>"
+        table +=        "<th>Size</th>"
+        table +=        "<th>Hill Climbing</th>"
+        table +=        "<th>Simmulated Annealing</th>"
+        table +=        "<th>Genetic Algorithm</th>"
+        table +=    "</tr>"
+        table += "</thead>"
+        table += "<tbody>";
+        sizeGroups = pd.unique(self.resultSet["Size"])
+        sizeSubGroup = self.resultSet.groupby("Size")
+        for i in range(0,len(sizeGroups)):
+            table +="<tr>"
+            table += "<td>"+str(sizeGroups[i])+"</td>"
+            sizeSol = sizeSubGroup.get_group(sizeGroups[i])
+            solType = pd.unique(sizeSol["Algorithm"])
+            solSubGroup = sizeSol.groupby("Algorithm") 
+            for j in range(0,len(solType)):
+                subgroup = solSubGroup.get_group(solType[j])
+                solutions =  subgroup[subgroup["Threatened_Queens"]==0]
+                solutionNumber = solutions.size
+                table +="<td>"
+                table +="Mean:\n\n"
+                table +=self.serieString(subgroup.mean(axis='index',numeric_only=True))
+                table +="Starndar Deviation:\n\n"
+                table +=self.serieString(subgroup.std(axis='index',ddof=0,numeric_only=True))
+                table +="Percentage of optimal solutions = "
+                table +=str(solutionNumber/all) + "\n"
+                table +="</td>"
+            table +="</tr>"
+        with open(AnalysisfileName,'a') as file:
+            file.write(table +"</tbody>"+"</table>")
+                
     def getMean(self):
         return self.resultSet.mean(axis='index',numeric_only=True)
 
