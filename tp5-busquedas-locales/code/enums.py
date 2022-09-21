@@ -4,7 +4,6 @@ class Solution(IntEnum):
     HILL_CLIMBING = 1 
     SIM_ANNEALING = 2
     GENETIC = 3
-    RunAll = 4
 
 class Move(IntEnum):
     UPDiag = 0

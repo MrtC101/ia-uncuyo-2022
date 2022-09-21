@@ -18,29 +18,27 @@ class Simulation:
         Environment.print_enviromentExtern(solution[0])
     
     def run(self,solutionType):
-        if solutionType == Solution.HILL_CLIMBING:
+        if solutionType == Solution.HILL_CLIMBING.name:
             solution = self.agent.hill_climbing()
-        elif solutionType == Solution.SIM_ANNEALING:
+        elif solutionType == Solution.SIM_ANNEALING.name:
             solution = self.agent.simulated_annealing()
-        elif solutionType == Solution.GENETIC:
+        elif solutionType == Solution.GENETIC.name:
             solution = self.agent.genetic_algorithm()
-        else:
-            raise Exception("No type solution was selected.")
         return solution
 
     def runAll(self):
         resultArr = []
         for sol in Solution:
-            self.resetStateVisitedAmount()
+            self.agent.resetStateVisitedAmount()
             startTime = time.time()
-            state = self.run(sol)
+            state = self.run(sol.name)
             endTime = time.time()
-            resultArr.append(state[0],state[1],self.getStatesVisitedAmount(),endTime-startTime)
+            resultArr.append((state[0],state[1],self.agent.getStatesVisitedAmount(),endTime-startTime))
         return resultArr
     
     def startSimulation(size,solutionType):
         currSim = Simulation(size)
-        solution = currSim.run(solutionType)
+        solution = currSim.run(solutionType.name)
         currSim.printSolution(solution)
 
     def startSimulationThread(resultSet,size,iterNumber):
@@ -48,7 +46,7 @@ class Simulation:
             currSim = Simulation(size)
             resultArr = currSim.runAll()
             for i in range(0,len(resultArr)):
-                register = [Solution(i).name,size,resultArr[i][1],resultArr[i][2],resultArr[i][3]]
+                register = [Solution(i+1).name,size,resultArr[i][1],resultArr[i][2],resultArr[i][3]]
                 resultSet.addRegister(register)
 
     

@@ -78,7 +78,7 @@ class Agent:
         max = self.env.size*2
         while self.getStatesVisitedAmount() < max:
             nextState = self.__findNeighbor(currentState);
-            if nextState[1] >= currentState[1]:
+            if nextState[1] >= currentState[1]:#limite
                 return currentState
             currentState = nextState
             self.__addStatesVisitedAmount()
@@ -100,7 +100,7 @@ class Agent:
         while True:
             self.__addStatesVisitedAmount()
             T = self.__schedule(self.getStatesVisitedAmount,currentState[1])
-            if(T < 0.003):
+            if(T < 0.03):#limite
                 return currentState
             nextState = self.__findRandomNeighbor(currentState);
             E = nextState[1]-currentState[1] 
@@ -114,15 +114,55 @@ class Agent:
                 if(a[0]==True):
                    currentState = nextState
 #------------------------------------------------------------------------#
-    def genetic_algorithm(self):
-        state = None
-        while(state[1]>0 and self.getStatesVisitedAmount()<100):
-            new_population = []
-            for i in range(1,200):
-                x =
-                y =
-                child =
-                if():
-                    mutate(state);
-                new_population.append(state)
+    def random_selection(self,population):
+        i = randint(0,(len(population)-1))
+        state = population[i] 
         return state
+
+    def reproduce(self,x,y):
+        newtable = []
+        v = randint(0,len(x)-1)
+        for i in range(0,len(x[0])):
+            if(i<v):
+                newtable.append(x[0][i])
+            else:
+                newtable.append(y[0][i])
+        child = (newtable,self.__checkQueen(newtable))
+        return child
+
+    def mutate(self,state):
+        posX = randint(0,len(state)-1)
+        posY = randint(0,len(state)-1)
+        newtable = state[0]
+        newtable[posX] = posY
+        newstate = (newtable,self.__checkQueen(newtable))
+        return newstate
+
+    def generatePopulation(self,populationSize,problemSize):
+        population = []
+        for i in range(0,populationSize):
+            state = []
+            for j in range(0,problemSize):
+                state.append(randint(0,problemSize-1))
+            population.append((state,self.__checkQueen(state)))
+        return population
+
+    def genetic_algorithm(self):
+        popSize = self.env.size
+        population = self.generatePopulation(popSize,self.env.size)
+        limit = popSize * 10 #limite
+        bestState = population[0]
+        while(bestState[1] > 0 and self.getStatesVisitedAmount() < limit):
+            new_population = []
+            for i in range(0,len(population)):
+                x = self.random_selection(population)
+                y = self.random_selection(population)
+                child = self.reproduce(x,y)
+                if(choices([True,False],(0.1,0.9))[0]):
+                    child = self.mutate(child);
+                if(bestState[1]>child[1]):
+                    bestState=child
+                new_population.append(child)
+            population = new_population
+            self.__addStatesVisitedAmount()
+        return bestState
