@@ -14,7 +14,7 @@ class Simulation:
         print("Cantidad de reinas amenazadas: ",solution[1])
         print("Tablero Inicial:")
         self.env.print_enviroment()
-        print("Tablero Solicion:")
+        print("Tablero Solucion:")
         Environment.print_enviromentExtern(solution[0])
     
     def run(self,solutionType):
@@ -36,10 +36,20 @@ class Simulation:
             resultArr.append((state[0],state[1],self.agent.getStatesVisitedAmount(),endTime-startTime))
         return resultArr
     
-    def startSimulation(size,solutionType):
+    def startSimulation(size,solutionType,resultSet):
         currSim = Simulation(size)
         solution = currSim.run(solutionType.name)
         currSim.printSolution(solution)
+        if(solutionType == Solution.GENETIC):
+            for i in range(0,len(currSim.agent.arrBSWS)):
+                register = [solutionType.name,size,"BestState",currSim.agent.arrBSWS[i][0],currSim.agent.arrBSWS[i][1]];
+                resultSet.addRegister(register);
+                register = [solutionType.name,size,"WorstState",currSim.agent.arrBSWS[i][0],currSim.agent.arrBSWS[i][2]];
+                resultSet.addRegister(register);
+        else:
+            for i in range(0,len(currSim.agent.arrH)):
+                register = [solutionType.name,size,currSim.agent.arrH[i]];
+                resultSet.addRegister(register);
 
     def startSimulationThread(resultSet,size,iterNumber):
         for i in range(0,iterNumber):

@@ -1,3 +1,4 @@
+from sqlite3 import Row
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -15,7 +16,7 @@ class Results:
         axes = serie.axes[0]
         rep = "<ul>"
         for i in range(1,len(values)):
-            rep +="<li>"+ axes[i] +" = "+ str(values[i]) + "\n\n"+ "</li>"
+            rep +="<li>"+ axes[i] +" = "+ str(round(values[i],3)) + "\n\n"+ "</li>"
         return rep + "</ul>"
     
     def dataAnalysis(self,AnalysisfileName):
@@ -48,7 +49,7 @@ class Results:
                 table +="Starndar Deviation:\n\n"
                 table +=self.serieString(subgroup.std(axis='index',ddof=0,numeric_only=True))
                 table +="Percentage of optimal solutions = "
-                table +=str(solutionNumber/all) + "\n"
+                table +=str(round(solutionNumber/all,3)) + "\n"
                 table +="</td>"
             table +="</tr>"
         with open(AnalysisfileName,'a') as file:
@@ -64,17 +65,28 @@ class Results:
         return self.resultSet.std(axis='index',ddof=0,numeric_only=True)
 
     def loadCSV(self,path):
-        self.resultSet = pd.read_csv(path)
+        labels = self.resultSet.axes[1]
+        self.resultSet = pd.read_csv(path,usecols=labels)
+        self.index = len(self.resultSet)-1
     
-    def makeCSV(self,path):
+    def makeCSVWrite(self,path):
         self.path=path
-        pd.DataFrame.to_csv(self.resultSet,path)
+        pd.DataFrame.to_csv(self.resultSet,path,mode="w")
+
+    def makeCSVAppend(self,path): 
+        self.path=path
+        pd.DataFrame.to_csv(self.resultSet,path,header=False,mode="a")
 
     def addRegister(self,register):
         self.mutex.acquire()
         self.resultSet.loc[self.index] = register
         self.index+=1
         self.mutex.release()
+
+    def plotDisDiagram(self,x,y,hue):
+        plt.show(block = False)
+        sns.relplot(x=x,y=y,hue=hue,kind="line",data=self.resultSet)
+        plt.show(block = False)
 
     def plotBoxDiagram1(self,x,y):
         plt.show(block = False)

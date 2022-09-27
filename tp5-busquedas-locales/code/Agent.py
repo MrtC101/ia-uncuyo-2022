@@ -1,13 +1,17 @@
-from re import X
+from re import A, X
+from webbrowser import get
+from xml.sax.handler import property_lexical_handler
 import treelib as t
 from random import randint,choices, random
 from enums import Move
 import math
 
 class Agent:
+    
     #resive como parametro un objeto Environment
     def __init__(self,env):
         self.env = env
+        self.arrH = []
         self.statesVisitedAmount = 0
 
     def resetStateVisitedAmount(self):
@@ -18,6 +22,9 @@ class Agent:
 
     def __addStatesVisitedAmount(self):
         self.statesVisitedAmount+=1
+    
+    def __addToStatesAmount(self,i):
+        self.statesVisitedAmount+=i
 
     def __getNextPos(self,queenPos,direction,currX):
         if(direction==Move.UPDiag):
@@ -57,6 +64,7 @@ class Agent:
                                     checkedNum += 1
                                     hashTable[str(nextPos)] = True
                                 checked[move.name] = True
+        self.arrH.append(checkedNum)
         return checkedNum
 #----------------------------------------------------------------------#
     def __findNeighbor(self,state):
@@ -100,7 +108,7 @@ class Agent:
         while True:
             self.__addStatesVisitedAmount()
             T = self.__schedule(self.getStatesVisitedAmount,currentState[1])
-            if(T < 0.03):#limite
+            if(T < 0.003):#limite
                 return currentState
             nextState = self.__findRandomNeighbor(currentState);
             E = nextState[1]-currentState[1] 
@@ -114,28 +122,66 @@ class Agent:
                 if(a[0]==True):
                    currentState = nextState
 #------------------------------------------------------------------------#
-    def random_selection(self,population):
-        i = randint(0,(len(population)-1))
-        state = population[i] 
-        return state
+    def selection(self,population):
+        popuArr = population.copy()
+        newParents = []
+        x = randint(0,len(population)-1)
+        y = randint(0,len(population)-1)
+        if(popuArr[x][1]<popuArr[y][1]):
+            newParents = [popuArr[x],popuArr[y]]
+        else:
+            newParents = [popuArr[y],popuArr[x]]
+        for i in range(0,len(popuArr)):
+            if(popuArr[i][1]==0):
+                p = 1
+            else:
+                p = 1/popuArr[i][1]
+            np = 1-p
+            if(newParents[0][1] > popuArr[i][1]):
+                if(choices([True,False],(p,np))[0]):
+                    newParents[0] = popuArr[i]
+            elif(newParents[1][1] > popuArr[i][1]):
+                if(choices([True,False],(p,np))[0]):
+                    newParents[1] = popuArr[i] 
+        return (newParents[0],newParents[1])
 
     def reproduce(self,x,y):
         newtable = []
-        v = randint(0,len(x)-1)
-        for i in range(0,len(x[0])):
-            if(i<v):
-                newtable.append(x[0][i])
-            else:
-                newtable.append(y[0][i])
+        valuesTable = {}
+        currentParent = x[0]
+        size = len(currentParent)
+        switched = False
+        switchCount = 0
+        for i in range(0,size):
+            if(valuesTable.get(str(currentParent[i]))==True):
+                switchCount+=1
+                if(switched):
+                    switched = False
+                    currentParent = x[0]
+                else:
+                    switched = True
+                    currentParent = y[0]
+            valuesTable[str(currentParent[i])] = True
+            newtable.append(currentParent[i])
+        if(switchCount < 1):
+            newtable = []
+            mid = randint(0,len(currentParent)-1)
+            for i in range(0,size):
+                if(mid > i):
+                    newtable.append(x[0][i])
+                else:
+                    newtable.append(y[0][i])
         child = (newtable,self.__checkQueen(newtable))
         return child
 
     def mutate(self,state):
-        posX = randint(0,len(state)-1)
-        posY = randint(0,len(state)-1)
-        newtable = state[0]
-        newtable[posX] = posY
-        newstate = (newtable,self.__checkQueen(newtable))
+        size = math.floor(len(state[0])/2)
+        for i in range(0,size):
+            posX = randint(0,len(state[0])-1)
+            posY = randint(0,len(state[0])-1)
+            newtable = state[0]
+            newtable[posX] = posY
+            newstate = (newtable,self.__checkQueen(newtable))
         return newstate
 
     def generatePopulation(self,populationSize,problemSize):
@@ -148,21 +194,28 @@ class Agent:
         return population
 
     def genetic_algorithm(self):
+        self.arrBSWS = []
         popSize = self.env.size
         population = self.generatePopulation(popSize,self.env.size)
-        limit = popSize * 10 #limite
+        limit = 2000 #limite
+        it = 0
         bestState = population[0]
-        while(bestState[1] > 0 and self.getStatesVisitedAmount() < limit):
+        while(bestState[1] > 0 and it < limit):
             new_population = []
+            bestState = population[0]
+            worstState = population[0]
             for i in range(0,len(population)):
-                x = self.random_selection(population)
-                y = self.random_selection(population)
-                child = self.reproduce(x,y)
-                if(choices([True,False],(0.1,0.9))[0]):
+                parents = self.selection(population)
+                child = self.reproduce(parents[0],parents[1])
+                if(choices([True,False],(0.5,0.5))[0]):
                     child = self.mutate(child);
                 if(bestState[1]>child[1]):
-                    bestState=child
+                    bestState = child
+                if(worstState[1]<child[1]):
+                    worstState = child
                 new_population.append(child)
             population = new_population
-            self.__addStatesVisitedAmount()
+            self.__addToStatesAmount(popSize)
+            it+=1
+            self.arrBSWS.append((it,bestState[1],worstState[1]))
         return bestState
