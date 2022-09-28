@@ -92,17 +92,120 @@ Cada asignación en la matriz nos genera un grafo de restricciones.
 + El Color <input type="color" value="#93c47d"> indica que la variable es afectada por la restriccion $C_3$.
 
 ### En la tabla se estarían influenciadas las siguientes variables.
-!["cuadricula"](Cuadicula.png)
+!["cuadriculaSudoku"][cuadricula]
 
 Para solucionar este problema CSP se utilizaría un algoritmo basado en **Backtraking** y **heurísticas** como:
 
 + La heurística de **Minimum Remaining Values (MRV)** para elegír variables con menor cantidad de valores legales restantes primero.
 + También se utiliza la **Heurística de Grado** para poder determinar las casillas con mayor grado de restricción y de esta manera se rellenarían las casillas más restringidas primero.
 
-2. E.
+## 2. Utilizar AC-3 para demostrar que la arco consistencia puede detectar la inconsistencia de la asignación parcial {WA=red, V=blue}  para el problema del colorar el mapa de Australia.
+
+## Demostracion
+Hipotesis:  
+$P :=$ La arco consitencia puede detectar Inconcistencias de Arco.  
+Tesis:  
+$Q :=$ La asignación $X=\{WA=Rojo, V=Azul\}$ para el problema del coloreado de mapa de Australia con tres colores es arco inconcistente.
+
+Se busca demostrar que $P\implies Q$.
+
+El problema de coloreado del mapa de Australia se puede interpretar como un CSP. Entonces, para la demostracion, utilizaremos el algoritmo **AC-3** que utiliza la heurística inconcistencia de arco para detectar asignaciones incorrectas en las variables de un problema CSP.
+
+![][AC-3]
+
+El Algoritmo AC-3 resive como entrada una tupla de tres conjuntos $(X,D,C)$. $X$ es el conjunto de Variables, $D$ es el conjunto de dominios de Cada Variable, y $C$ es el conjunto de restricciones del problema.
+
+En el caso particular del problema de Pintar el Mapa de Australia con tres colores, estas variables se pueden definir los conjuntos como:  
+!["Mapa de Australia y Grafo"][MapaAutralia]  
+El Conjunto de variables:
+$$X = \{WA,NT,SA,Q,NSW,V,T\}$$
+El Dominio de cada variable es igual para todas:
+$$D_n = \{Rojo,Azul,Amarillo\}$$
+El Conjunto de Restricciones:
+$$C=\{C_1\}$$
+Donde la restriccion es:
+
++ $C_1$: No pueden pintarse dos nodos adyacentes del mismo color.
+
+Para la demostración *AC-3* resivira en la tupla de entrada el conjunto $X=\{WA=Rojo, V=Azul\}$ donde las demas variables se encuentran no inicializadas (sin color).
+Para represenar el Dominio Utilizaremos un arreglo donde se ven los colores de cada Dominio.
+Entonces el Algoritmo seguira los siguientes pasos:
+1. Se inicializa la cola con los arcos 
+$$[(WA,NT),(NT,WA),(WA,SA),(SA,WA),(NT,SA),(SA,NT),(NT,Q),(Q,NT),(SA,Q),(Q,SA),(SA,NSW),(NSW,SA),(SA,V),(V,SA),(Q,NSW),(NSW,Q),(NSW,V),(V,NSW)]$$
+2. Como la cola no esta Vacia itera
+3. iteracion #1:  
+    1. La cola devuelve $(WA,NT)$
+    2. Se ingresa al metodo **Revise()**
+    3. Por cada color $x$ en $D_{WA}$ comprueba que para todo color $y$ en %D_{NT}% permita la asignacion $(x,y)$.(Como $WA=Rojo$ se revisara solo $x=Rojo$ con los tres colores de y)
+    4.Como resultado $D_{WA} = {}$
+
+
+<table border="1" cellpadding="0" cellspacing="0">
+    <tr>
+        <td width="8%">
+            <table border="1" cellpadding="" cellspacing="0" width="2%">
+            <caption>WA</caption>
+                <tr>
+                    <td width="100%" bgcolor="red"></td>
+                </tr>
+            </table>
+        </td>
+        <td width="8%">
+            <table border="1" cellpadding="" cellspacing="0" width="2%"><caption>NT</caption>
+                <tr>
+                    <td width="100%" bgcolor="red"></td>
+                    <td width="100%" bgcolor="blue"></td>
+                    <td width="100%" bgcolor="yellow"></td>
+                </tr>
+            </table>
+        </td>
+        <<td width="8%">
+            <table border="1" cellpadding="" cellspacing="0" width="2%"><caption>SA</caption>
+                <tr>
+                    <td width="100%" bgcolor="red"></td>
+                </tr>
+            </table>
+        </td>
+        <td width="8%">
+            <table border="1" cellpadding="" cellspacing="0" width="2%"><caption>Q</caption>
+                <tr>
+                    <td width="100%" bgcolor="red"></td>
+                </tr>
+            </table>
+        </td>
+        <td width="8%">
+            <table border="1" cellpadding="" cellspacing="0" width="2%"><caption>NSW</caption>
+                <tr>
+                    <td width="100%" bgcolor="red"></td>
+                </tr>
+            </table>
+        </td>
+        <td width="8%">
+            <table border="1" cellpadding="" cellspacing="0" width="2%"><caption>V</caption>
+                <tr>
+                    <td width="100%" bgcolor="red"></td>
+                </tr>
+            </table>
+        </td>
+        <td width="8%">
+            <table border="1" cellpadding="" cellspacing="0" width="2%"><caption>T</caption>
+                <tr>
+                    <td width="100%" bgcolor="red"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
 3. E.
 
 4. E.
 
 5. E.
+
+
+Imagenes:  
+
+[MapaAutralia]:MapaAustralia.png
+[AC-3]:AlgoritmoAC-3.png
+[Cuadricula]:Cuadicula.png
