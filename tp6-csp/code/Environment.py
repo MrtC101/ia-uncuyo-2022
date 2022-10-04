@@ -5,8 +5,15 @@ class Environment:
     def __init__(self,size):
         self.size = size
         self.table = []
-        self.__generate_table()
-
+        self.domain = []
+        for i in range(0,size):
+            self.table.append(0)
+        for i in range(0,size):
+            currDomain = []
+            for j in range(0,size):
+                currDomain.append(j)
+            self.domain.append(currDomain)
+        
     def __generate_table(self):
         for i in range(0,self.size):
             self.table.append(random.randint(0,self.size-1))

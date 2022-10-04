@@ -18,12 +18,10 @@ class Simulation:
         Environment.print_enviromentExtern(solution[0])
     
     def run(self,solutionType):
-        if solutionType == Solution.HILL_CLIMBING.name:
-            solution = self.agent.hill_climbing()
-        elif solutionType == Solution.SIM_ANNEALING.name:
-            solution = self.agent.simulated_annealing()
-        elif solutionType == Solution.GENETIC.name:
-            solution = self.agent.genetic_algorithm()
+        if solutionType == Solution.BACKTRACKING.name:
+            solution = self.agent.backtrackingSearch(False)
+        elif solutionType == Solution.FOWARDCHECK.name:
+            solution = self.agent.backtrackingSearch(True)
         return solution
 
     def runAll(self):
@@ -36,20 +34,10 @@ class Simulation:
             resultArr.append((state[0],state[1],self.agent.getStatesVisitedAmount(),endTime-startTime))
         return resultArr
     
-    def startSimulation(size,solutionType,resultSet):
+    def startSimulation(size,solutionType):
         currSim = Simulation(size)
         solution = currSim.run(solutionType.name)
         currSim.printSolution(solution)
-        if(solutionType == Solution.GENETIC):
-            for i in range(0,len(currSim.agent.arrBSWS)):
-                register = [solutionType.name,size,"BestState",currSim.agent.arrBSWS[i][0],currSim.agent.arrBSWS[i][1]];
-                resultSet.addRegister(register);
-                register = [solutionType.name,size,"WorstState",currSim.agent.arrBSWS[i][0],currSim.agent.arrBSWS[i][2]];
-                resultSet.addRegister(register);
-        else:
-            for i in range(0,len(currSim.agent.arrH)):
-                register = [solutionType.name,size,currSim.agent.arrH[i]];
-                resultSet.addRegister(register);
 
     def startSimulationThread(resultSet,size,iterNumber):
         for i in range(0,iterNumber):

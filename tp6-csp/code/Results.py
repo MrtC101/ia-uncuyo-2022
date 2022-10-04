@@ -20,14 +20,15 @@ class Results:
         return rep + "</ul>"
     
     def dataAnalysis(self,AnalysisfileName):
+        sizeGroups = pd.unique(self.resultSet["Size"])
         all = self.resultSet.size
         table = "<table><caption>Results</caption>"
         table += "<thead>"
         table +=    "<tr>"
         table +=        "<th>Size</th>"
-        table +=        "<th>Hill Climbing</th>"
-        table +=        "<th>Simmulated Annealing</th>"
-        table +=        "<th>Genetic Algorithm</th>"
+        AlgorithmNames = pd.unique(self.resultSet["Algorithm"])
+        for i in range(0,len(AlgorithmNames)):
+            table +="<th>"+ AlgorithmNames[i] +"</th>"
         table +=    "</tr>"
         table += "</thead>"
         table += "<tbody>";
@@ -100,7 +101,7 @@ class Results:
 
     def plotBoxDiagram3(self,x,y,col):
         plt.show(block = False)
-        sns.catplot(x=x,y=y,col=col,kind="box",data=self.resultSet)
+        sns.catplot(x=x,y=y,col=col,col_wrap=3,height=4,aspect=1,margin_titles=True,kind="box",data=self.resultSet)
         plt.show(block = False)
 
     def plotBoxDiagram4(self,x,y,hue,col):
@@ -114,7 +115,7 @@ class Results:
         plt.show(block = False)
 
     def savePlot(self,fileName):
-        plt.savefig( fileName + ".png")
+        plt.savefig( fileName + ".png",dpi=500)
     
     def Union(self,dataSet):
         self.resultSet = pd.concat([self.resultSet,dataSet])

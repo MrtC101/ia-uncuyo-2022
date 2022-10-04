@@ -1,11 +1,13 @@
 from enum import IntEnum
 
+from matplotlib.sankey import RIGHT
+
 class Solution(IntEnum):
-    HILL_CLIMBING = 1 
-    SIM_ANNEALING = 2
-    GENETIC = 3
+    BACKTRACKING = 1 
+    FOWARDCHECK = 2
 
 class Move(IntEnum):
     UPDiag = 0
     LEFT = 1
     DOWNDiag = 2
+    RIGHT = 3

@@ -1,3 +1,4 @@
+from sys import excepthook
 import treelib as t
 from random import randint,choices, random
 from enums import Move
@@ -8,8 +9,8 @@ class Agent:
     #resive como parametro un objeto Environment
     def __init__(self,env):
         self.env = env
-        self.arrH = []
         self.statesVisitedAmount = 0
+        self.foward = False
 
     def resetStateVisitedAmount(self):
         self.statesVisitedAmount = 0
@@ -23,7 +24,15 @@ class Agent:
     def __addToStatesAmount(self,i):
         self.statesVisitedAmount+=i
 
-    def __getNextPos(self,queenPos,direction,currX):
+    def __getRightPos(self,queenPos,direction,currX):
+        if(direction==Move.UPDiag):
+            return (currX,queenPos[1]+(queenPos[0]-currX))
+        elif(direction==Move.RIGHT):
+            return (currX,queenPos[1])
+        elif(direction==Move.DOWNDiag):
+            return (currX,queenPos[1]-(queenPos[0]-currX))
+
+    def __getLeftPos(self,queenPos,direction,currX):
         if(direction==Move.UPDiag):
             return (currX,queenPos[1]+(queenPos[0]-currX))
         elif(direction==Move.LEFT):
@@ -51,7 +60,7 @@ class Agent:
             for j in range(i-1,-1,-1):
                 for move in moveArr: 
                     if(checked[move.name]==False):
-                        nextPos = self.__getNextPos(queenPos,move,j)
+                        nextPos = self.__getLeftPos(queenPos,move,j)
                         if self.__is_inside(nextPos):
                             if hashTable.get(str(nextPos)) != None:
                                 if(hashTable[str(queenPos)] == False):
@@ -61,16 +70,75 @@ class Agent:
                                     checkedNum += 1
                                     hashTable[str(nextPos)] = True
                                 checked[move.name] = True
-        self.arrH.append(checkedNum)
         return checkedNum
+    
 #----------------------------------------------------------------------#
-    def VueltaRecursiva(self,max):
-        current = (self.env.table,self.__checkQueen(self.env.table))
-        if current[1] == 0:
-            return current
-        else:
-            
+    def heuristic(self,state,currVar):
+        checkedNum = 0
+        moveArr = {Move.UPDiag,Move.LEFT,Move.DOWNDiag}
+        checked = {}
+        #por cada reina
+        for move in moveArr:
+            checked[move.name] = False
+        queenPos = (currVar,state[currVar])
+        #revisar las columnas anteriores
+        for j in range(currVar-1,-1,-1):
+            for move in moveArr: 
+                if(checked[move.name]==False):
+                    nextPos = self.__getLeftPos(queenPos,move,j)
+                    if self.__is_inside(nextPos):
+                        if((j,state[j])==nextPos):
+                            checkedNum += 1
+                            checked[move.name] = True
+        return checkedNum
 
-    def BusquedaConVuelta():
-        solution = VueltaRecursiva(30)
-        return solution
+    def restrictDomains(self,domain,state,currVar):
+        moveArr = {Move.UPDiag,Move.RIGHT,Move.DOWNDiag}
+        skip = False
+        oldtable = domain[0]
+        newDomain = []
+        for i in range(0,len(oldtable)):
+            col = []
+            for j in range(0,len(oldtable[i])):
+                col.append(oldtable[i][j])
+            newDomain.append(col)
+        queenPos = (currVar,state[currVar])
+        #revisar las columnas anteriores
+        for j in range(currVar+1,self.env.size):
+            for move in moveArr: 
+                nextPos = self.__getRightPos(queenPos,move,j)
+                if self.__is_inside(nextPos):
+                    if newDomain[nextPos[0]].count(nextPos[1]) > 0:
+                        newDomain[nextPos[0]].remove(nextPos[1])
+            if self.foward:
+                if len(newDomain[nextPos[0]]) == 0:
+                    skip = True
+                    break;
+        return (newDomain,skip)
+
+    def backtrack(self,currSolution,domain,currentVar):
+        if currentVar == self.env.size:
+            h = self.__checkQueen(currSolution[0])
+            if h == 0:
+                return (currSolution[0],h)
+            else:
+                return False
+        table = currSolution[0].copy()
+        for val in domain[0][currentVar]:
+            self.__addStatesVisitedAmount()    
+            table[currentVar] = val
+            if self.heuristic(table,currentVar) == 0:
+                newdomain = self.restrictDomains(domain,table,currentVar)
+                if not newdomain[1]:
+                    newSolution = (table,self.env.size)
+                    newSolution = self.backtrack(newSolution,newdomain,currentVar+1)    
+                    if newSolution != False:
+                        return newSolution
+        return False
+
+    def backtrackingSearch(self,foward):
+        self.foward = foward
+        solution = (self.env.table,self.__checkQueen(self.env.table))
+        domain = (self.env.domain,False)
+        return self.backtrack(solution,domain,0)
+#----------------------------------------------------------------------#

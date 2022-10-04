@@ -7,7 +7,14 @@
 
 ## 1. Describir en detalle una formulación CSP para el SUDOKU
 
-Para representar el tablero de Sudoku se puede utilizar una matriz de 9 por 9.  
+### Planteamiento
+
++ Estado inicial : $\{\}$  
++ Función Susesor: Se asigna a un valor a la proxima variable con menor cantidad de variables legales y mayor grado de restricciones (si se detecta inconsistencia se utiliza backtracking).  
++ Estado objetivo: La asignación de todas las casillas de manera consistente.
++ Costo de camino: consto constante para cada eleccion.
++ Para representar el tablero de Sudoku se puede utilizar una matriz de 9 por 9.  
+
 En este caso entonces se puede interpretar como un problema que se resuelve como un CSP donde:  
 Las variables son cada casilla del tablero:  
 $$\{X_{00},X_{01},X_{02},X_{03},X_{04},...,X_{10},X_{11},...,X_{88}\}$$ 
@@ -21,11 +28,6 @@ $$\{C_1,C_2,C_3\}$$
 + $C_1$: Las variables en cada columna de la tabla no deben repetir ningún valor.
 + $C2$: Las variables en cada fila de la tabla no deben repetir ningún valor.
 + $C3$: Las variables en las 9 tablas cuadradas de 3 por 3 interiores no deben repetir ningún valor.
-
-Estado inicial ? $\{\}$
-Función Susesor: Se asigna a un valor a la proxima variable con menor cantidad de variables legales y mayor grado de restricciones(si se detecta inconcistencia se utiliza backtracking).
-Estado objetivo: La asignacion de todas las casillas de manera concistente.
-Costo de camino: consto constante para cada eleccion.
 
 El tablero comienza con variables ya inicializadas que no violan ninguna restricción y estas no son modificables. Por lo que el dominio de la mayoría de las variables se ve restringido al comienzo del problema.
 
@@ -141,7 +143,7 @@ Donde la restricción es:
 Para la demostración *AC-3* resibirá en la tupla de entrada el conjunto $X=\{WA=Rojo, V=Azul\}$ donde las demás variables se encuentran no inicializadas (sin color).
 Para representar el Dominio utilizaremos un arreglo donde se ven los colores de cada Dominio.
 
-Entonces el Algoritmo seguirá los siguientes pasos:  
+### Prueba de escritorio  (Se realizan 32 iteraciónes)
 
 1. Se inicializa la cola con los arcos  
 $[(WA,NT),(NT,WA),(WA,SA),(SA,WA),(NT,SA),(SA,NT),(NT,Q),$
@@ -1056,27 +1058,27 @@ Tabla de Dominio:
 
 ![AC-3]
 
-La complejidad del algoritmo AC-3 es de
-
 La complejidad del algoritmo *AC-3* en un grafo es $O(cd^3)$.
 
-Al tratarse de un arbol sabemos que la cola del algoritmo se inicia con una cantidad de arcos $(n-1)$ siendo n la cantidad de variables o nodos en el árbol, los arcos deben estar ordenados de manera que el padre de un nodo siempre aparezca antes que el nodo.
+Al tratarse de un árbol sabemos que la cola del algoritmo se inicia con una cantidad de arcos $(n-1)$ siendo $n$ la cantidad de variables o nodos en el árbol, los arcos deben estar ordenados de manera que el padre de un nodo siempre aparezca antes que el nodo.
 
-El metodo REVISE() en el peor caso tienen una complejidad de $d^2$ siendo $d$ la cardinalidad del dominio $D_i$ de la variable $X_i$. 
+El método $REVISE()$ en el peor caso tienen una complejidad de $d^2$ siendo $d$ la cardinalidad del dominio $D_i$ de la variable $X_i$. 
 
-De esta manera no es nesesario revisar los arcos en ambos sentidos ya que si el padre es arco concistente con su hijo entonces cualquier asignacion al padre nos asegurara existiran valores para sus hijos.
+De esta manera no es necesario revisar los arcos en ambos sentidos ya que si el padre es arco consistente con su hijo entonces cualquier asignación al padre nos asegurará existen valores para sus hijos.
 
 Nos devuelve una complejidad temporal $O(nd^2)$
 
 ## 4. Demostrar que la arco consistencia puede lograrse en un tiempo total $O(n^2d^2)$
 
-Si cada nodo del grafo representando una variable del CSP, tiene una lista de contadores con un contador por cada variable adyacente en el grafo, donde se lleva cuenta de la cantidad de valores del dominio de el nodo que son concistentes con todos los valores del dominio de cada nodo adyacentes puede lograrse una complejidad de O(n^2d^2).
+Si cada nodo $X_i$ del grafo, representando una variable del CSP, tiene un contador por cada variable adyacente $X_k$, donde se lleva cuenta de la cantidad de valores del dominio $D_i$ que son consistentes con **todos** los valores del dominio $D_k$. Entonces, puede lograrse una complejidad de $O(n^2d^2)$.
 
-El algoritmo iniciara con todos los contadores en $0$, luego estos se actualizaran en cada iteracion con la funcion REVISE($X_i,X_j$). La función revise suma una unidad a una variable local $count$ por cada valor de $x$ de $D_i$ que no presente inconcistencia con ninguna variable $y$ de %D_j%. Finalmente antes de retornar el valor $revised$. Se actualiza el contador de $X_i$ respecto a $X_j$ y el de $X_j$ respecto a $X_i$. Al contador de $X_i$ se le asignara el valor de $count$ y al contador de  $X_j$ el valor resultado de  $ \#(D_j) - \#(D_i) + count$
+El algoritmo iniciará con todos los contadores en $0$, luego estos se actualizarán en cada iteración con la función $REVISE(X_i,X_j)$. 
 
-Finalmente cuando el bucle for quiera agregar un arco $(X_k,X_i)$ debera revisar si el contador de X_i respecto a la cantidad de variables que permiten consistencia con todos los valores de $X_k$ es igual a 0. Si se cumple entonces agrega el arco a la cola.
+La función $REVISE$ suma una unidad a una variable local $count$ por cada valor de $x$ de $D_i$ que no presente inconsistencia con **ninguna** variable $y$ de %D_j%. Y antes de retornar el valor de $revised$, Se actualiza el contador de $X_i$ respecto a $X_j$ asignándole el valor de $count$ y el de $X_j$ respecto a $X_i$ asignándole el resultado de  $ \#(D_j) - \#(D_i) + count$.
 
-PSEUDOCODIGO
+Finalmente cuando el bucle for quiera agregar un arco $(X_k,X_i)$ deberá revisar si el contador de $X_i$ respecto a $X_k$ tiene es igual a $0$. Si se cumple entonces agrega el arco a la cola.
+
+PSEUDOCÓDIGO
 
     function AC-3(csp) returns false if an inconsistency is found and true otherwise  
         local variables: queue, a queue of arcs, initially all the arcs in csp  
@@ -1100,13 +1102,50 @@ PSEUDOCODIGO
         X_j.Counters[i] = #(D_j)-#(D_i) + count   
         return revised
 
-La complejidad de REVISE siguie siendo $O(d^2)$ pero ahora cada arco $(X_k,X_i)$ solo se revisara 
+La complejidad de REVISE siguie siendo $O(d^2)$ pero la cantidad de arcos que se revisaran son solo $c$ esto nos deja una complejidad de $O(cd^2)$ pero como la cantidad maxima cantidad de arcos del grafo es $c = n*(n-1) = n^2-n$, entonces podemos escribir la complejidad como $O(n^2d^2)$.
 
 ## 5. Demostrar que para un CSP cuyo grafo de restricciones es un árbol estructurado con 2-consistencia implica que tiene n-consistencia (siendo n número total de variables)
 
+$Q(N):=$ un árbol estructurado CSP $T$ es $N$-constistente  
 
+Se debe demostrar:  
+$$Q(2) \implies Q(n)$$  
 
+### Demostracion por induccion
+
+#### Paso base
+
+$Q(2) \implies Q(3)$
+
+Para verificar 3-consistencia o consistencia de camino en un grafo se puede tomar todo camino $(X_i,X_m,X_j)$ y verificar que exista al menos 1 valor en el dominio de cada varible que permita una asignación consistente.  
+
+Si queremos comprobar si hay consistencia de camino en la terna, y teniendo en cuenta de que se trata de un árbol (no hay ciclos), simplemente podemos verificar que los arcos $(X_i,X_m)$ y $(X_m,X_j)$ son arco consistentes.
+
+Por hipótesis sabemos que el árbol es 2-consistente, es decir, todo arco $(X_i,X_j)$ es arco consistente. Esto quiere decir que tanto $(X_i,X_j)$ y $(X_m,X_j)$ son arco consistentes y por lo tanto cualquier terna $(X_i,X_m,X_j)$ es camino consistente.
+
+Si cada terna es camino consistente entonces el árbol es 3-consistente.
+
+#### Paso Inductivo  
+
+$Q(k) \implies Q(k+1)$
+
+Para verificar si un grafo es (k+1)-consistente debemos verificar que para toda (k+1)-upla $(X_i,X_j,...,X_k,X_{k+1})$ existe almenos un valor en el dominio de cada variable que permita consistencia.  
+
+Teniendo en cuenta que se trata de un árbol (no tiene ciclos). Podemos verificar que cada (k+1)-umpla es consistente verificando que cada k-upla, que sea subtupla, es k-consistente.  
+
+Es decir, debemos verificar que $(X_i,X_j,...,X_k)$,...,$(X_j,...,X_k,X_{k+1})$ son k-consistentes. Esto es verdadero por hipótesis. Por lo tanto, toda (k+1)-upla del árbol es (k+1)-consistente, entonces el árbol es (k+1)-consistente. 
+
+Queda demostrado que $Q(2) \implies Q(n)$
 
 [MapaAutralia]:MapaAustralia.png
 [AC-3]:AlgoritmoAC-3.png
 [Cuadricula]:Cuadicula.png
+
+## Results
+
+#### Conclusión
+Como el problema de las n reinas es un csp y por lo tanto no importa el orden de asignacion de las variables he decidido colocar las reinas de izquierda a derecha, por esta razon todas las soluciones son la misma en cada iteracion y la cantidad de estados explorados támbien. Por esto es que no existen gran candtidad de variaciones
+#### Cantidad de estados explorados
+!["Cantidad de estados explorados"](./ResultSet/BoxPlot-ExploredStates.png)
+#### Tiempo transcurrido de cada algoritmo
+![""](./ResultSet/BoxPlot-Time.png)
