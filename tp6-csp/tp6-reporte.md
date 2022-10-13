@@ -10,9 +10,9 @@
 ### Planteamiento
 
 + Estado inicial : $\{\}$  
-+ Función Susesor: Se asigna a un valor a la proxima variable con menor cantidad de variables legales y mayor grado de restricciones (si se detecta inconsistencia se utiliza backtracking).  
++ Función Sucesor: Se asigna a un valor a la proxima variable con menor cantidad de variables legales y mayor grado de restricciones (si se detecta inconsistencia se utiliza backtracking).  
 + Estado objetivo: La asignación de todas las casillas de manera consistente.
-+ Costo de camino: consto constante para cada eleccion.
++ Costo de camino: consto constante para cada elección.
 + Para representar el tablero de Sudoku se puede utilizar una matriz de 9 por 9.  
 
 En este caso entonces se puede interpretar como un problema que se resuelve como un CSP donde:  
@@ -20,10 +20,10 @@ Las variables son cada casilla del tablero:
 $$\{X_{00},X_{01},X_{02},X_{03},X_{04},...,X_{10},X_{11},...,X_{88}\}$$ 
 Para cada variable el dominio es de los números naturales del 1 al 9 por Ej:
 $$D_{00}=\{1,2,3,4,5,6,7,8,9\}$$
-Existen un conjunto finito de restricciónes:
+Existen un conjunto finito de restricciones:
 $$\{C_1,C_2,C_3\}$$
 
-### Las restricciónes son  
+### Las restricciones son  
 
 + $C_1$: Las variables en cada columna de la tabla no deben repetir ningún valor.
 + $C2$: Las variables en cada fila de la tabla no deben repetir ningún valor.
@@ -31,76 +31,12 @@ $$\{C_1,C_2,C_3\}$$
 
 El tablero comienza con variables ya inicializadas que no violan ninguna restricción y estas no son modificables. Por lo que el dominio de la mayoría de las variables se ve restringido al comienzo del problema.
 
-Cada asignación en la matriz nos genera un grafo de restricciónes.
+Cada asignación en la matriz nos genera un grafo de restricciones.
 
-### Por ejemplo la asignación de la variable $X_{42}$ nos genera el siguiente grafo de restricciónes
+### Por ejemplo la asignación de la variable $X_{42}$ nos genera el siguiente grafo de restricciones
 
-:::mermaid
-    graph LR;
-    id30((X<sub>30</sub>))
-    ---id40((X<sub>40</sub>))
-    ---id50((X<sub>50</sub>));
-    id31((X<sub>31</sub>))
-    ---id41((X<sub>41</sub>))
-    ---id51((X<sub>51</sub>));
-    id32((X<sub>32</sub>))
-    ---id42((X<sub>42</sub>))
-    ---id52((X<sub>52</sub>));
-    id30((X<sub>30</sub>))---id31((X<sub>31</sub>))---id32((X<sub>32</sub>));
-    id40((X<sub>40</sub>))
-    ---id41((X<sub>41</sub>))
-    ---id42((X<sub>42</sub>));
-    id50---id51---id52;
-    id42((X<sub>42</sub>))
-    ---id43((X<sub>43</sub>))
-    ---id44((X<sub>44</sub>))
-    ---id45((X<sub>45</sub>))
-    ---id46((X<sub>46</sub>))
-    ---id47((X<sub>47</sub>))
-    ---id48((X<sub>48</sub>));
-    id02((X<sub>02</sub>))
-    ---id12((X<sub>12</sub>))
-    ---id22((X<sub>22</sub>))
-    ---id32;
-    id52---id62((X<sub>62</sub>))
-    ---id72((X<sub>72</sub>))
-    ---id82((X<sub>82</sub>));
-
-    classDef selected fill:#e06666ff,stroke:#ffffffff,stroke-width:3px,color:#000000ff;
-    id42:::selected;
-
-    classDef restrictionC1 fill:#e0589fff,stroke:#ffffffff,stroke-width:3px,color:#000000ff;
-    id02:::restrictionC1;
-    id12:::restrictionC1;
-    id22:::restrictionC1;
-    id32:::restrictionC1;
-    id52:::restrictionC1;
-    id62:::restrictionC1;
-    id72:::restrictionC1;
-    id82:::restrictionC1;
-
-    classDef restrictionC2 fill:#e38e35ff,stroke:#ffffffff,stroke-width:3px,color:#000000ff;
-    id40:::restrictionC2;
-    id41:::restrictionC2;
-    id43:::restrictionC2;
-    id44:::restrictionC2;
-    id45:::restrictionC2;
-    id46:::restrictionC2;
-    id47:::restrictionC2;
-    id48:::restrictionC2;
-
-    classDef restrictionC3 fill:#93c47dff,stroke:#ffffffff,stroke-width:3px,color:#000000ff;
-    id30:::restrictionC3;
-    id31:::restrictionC3;
-    id50:::restrictionC3;
-    id51:::restrictionC3;
-:::
-
-### Referencia
-
-+ El Color <input type="color" value="#e0589f"> indica que la variable es afectada por la restricción $C_1$.
-+ El Color <input type="color" value="#e38e35"> indica que la variable es afectada por la restricción $C_2$.
-+ El Color <input type="color" value="#93c47d"> indica que la variable es afectada por la restricción $C_3$.
+![Grafo](./images/Grafo.png)
+![Referencias](./images/ReferenciasGrafo.png)
 
 ### En la tabla se estarían influenciadas las siguientes variables
 
@@ -111,7 +47,7 @@ Para solucionar este problema CSP se utilizara un algoritmo basado en **Backtrac
 + La heurística de **Minimum Remaining Values (MRV)** para elegir variables con menor cantidad de valores legales restantes primero.
 + También se utiliza la **Heurística de Grado** para poder determinar las casillas con mayor grado de restricción y de esta manera se rellenarían las casillas más restringidas primero.
 
-## 2. Utilizar el algoritmo AC-3 para demostrar que la arco consistencia puede detectar la inconsistencia de la asignación parcial {WA=red, V=blue} para el problema del colorar el mapa de Australia.  
+## 2. Utilizar el algoritmo AC-3 para demostrar que la arco consistencia puede detectar la inconsistencia de la asignación parcial {WA=red, V=blue} para el problema del colorar el mapa de Australia  
 
 ### Demostración
 
@@ -122,99 +58,40 @@ $Q :=$ La asignación $X=\{WA=Rojo, V=Azul\}$ para el problema del coloreado de 
 
 Se busca demostrar que $P\implies Q$.
 
-El problema de coloreado del mapa de Australia se puede interpretar como un CSP. Entonces, para la demostración, utilizaremos el algoritmo **AC-3** que utiliza la heurística inconsistencia de arco para detectar asignaciónes incorrectas en las variables de un problema CSP.
+El problema de coloreado del mapa de Australia se puede interpretar como un CSP. Entonces, para la demostración, utilizaremos el algoritmo **AC-3** que utiliza la heurística inconsistencia de arco para detectar asignaciones incorrectas en las variables de un problema CSP.
 
 !["AC-3 Code"][AC-3]
 
-El Algoritmo AC-3 resibe como entrada una tupla de tres conjuntos $(X,D,C)$. $X$ es el conjunto de Variables, $D$ es el conjunto de dominios de Cada Variable, y $C$ es el conjunto de restricciónes del problema.
+El Algoritmo AC-3 recibe como entrada una tupla de tres conjuntos $(X,D,C)$. $X$ es el conjunto de Variables, $D$ es el conjunto de dominios de Cada Variable, y $C$ es el conjunto de restricciones del problema.
 
 En el caso particular del problema de Pintar el Mapa de Australia con tres colores, estas variables se pueden definir los conjuntos como:  
-!["Mapa de Australia y Grafo"][MapaAutralia]  
+
+!["Mapa de Australia y Grafo"](./images/MapaAustralia.png)  
+
 El Conjunto de variables:
 $$X = \{WA,NT,SA,Q,NSW,V,T\}$$
 El Dominio de cada variable es igual para todas:
 $$D_n = \{Rojo,Azul,Amarillo\}$$
-El Conjunto de Restricciónes:
+El Conjunto de Restricciones:
 $$C=\{C_1\}$$
 Donde la restricción es:
 
 + $C_1$: No pueden pintarse dos nodos adyacentes del mismo color.
 
-Para la demostración *AC-3* resibirá en la tupla de entrada el conjunto $X=\{WA=Rojo, V=Azul\}$ donde las demás variables se encuentran no inicializadas (sin color).
+Para la demostración *AC-3* recibirá en la tupla de entrada el conjunto $X=\{WA=Rojo, V=Azul\}$ donde las demás variables se encuentran no inicializadas (sin color).
 Para representar el Dominio utilizaremos un arreglo donde se ven los colores de cada Dominio.
 
-### Prueba de escritorio  (Se realizan 32 iteraciónes)
+### Prueba de escritorio  (Se realizan 30 iteraciones)
 
 1. Se inicializa la cola con los arcos  
 $[(WA,NT),(NT,WA),(WA,SA),(SA,WA),(NT,SA),(SA,NT),(NT,Q),$
 $(Q,NT),(SA,Q),(Q,SA),(SA,NSW),(NSW,SA),(SA,V),(V,SA),$
 $(Q,NSW),(NSW,Q),(NSW,V),(V,NSW)]$  
-2. Como la cola no esta Vacia itera  
+2. Como la cola no esta Vacía itera  
 
 Tabla de Dominios:
-<table aling="center" border="1">
-    <tr>
-        <td width="1%">
-            <table border="1" width="100%"><caption>WA</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NT</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>SA</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>Q</caption>
-                <tr>
-                    <td width="100%" bgcolor="red"></td>
-                    <td width="100%" bgcolor="blue"></td>
-                    <td width="100%" bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NSW</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>V</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>T</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>  
+
+![Dom_it0](./images/Dominio_it0.png)  
 
 3. iteración #1:  
 3.1- La cola devuelve $(WA,NT)$ y la cola queda:  
@@ -237,70 +114,9 @@ $(NSW,Q),(NSW,V),(V,NSW)]$
 6.6- Por cada Variable $X_k$ en $X_{NT}.NEIGHBORS-\{X_{WA}\}$ se añade $(X_k,X_{NT})$ a la cola. Se añade  
 $[(WA,SA),(SA,WA),(NT,SA),(SA,NT),(NT,Q),(Q,NT),(SA,Q),$
 $(Q,SA),(SA,NSW),(NSW,SA),(SA,V),(V,SA),(Q,NSW),$
-$(NSW,Q),(NSW,V),(V,NSW),\textcolor{LimeGreen}{(SA,NT),(Q,NT)}]$ 
+$(NSW,Q),(NSW,V),(V,NSW),\textcolor{LimeGreen}{(SA,NT),(Q,NT)}]$  
 
-<table aling="center" border="1">
-    <tr>
-        <td width="1%">
-            <table border="1" width="100%"><caption>WA</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NT</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>SA</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>Q</caption>
-                <tr>
-                    <td width="100%" bgcolor="red"></td>
-                    <td width="100%" bgcolor="blue"></td>
-                    <td width="100%" bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NSW</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>V</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>T</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table> 
+![Dom_2](./images/Dominio_it2.png)
 
 5. iteración #3:  
 5.1- La cola devuelve $(WA,SA)$ y la cola queda:  
@@ -327,67 +143,8 @@ $(NSW,SA),(SA,V),(V,SA),(Q,NSW),(NSW,Q),(NSW,V),$
 $(V,NSW),(SA,NT),(Q,NT),\textcolor{LimeGreen}{(NT,SA),(Q,SA),(NSW,SA),(V,SA)}]$  
 
 Tabla de Dominio:
-<table aling="center" border="1">
-    <tr>
-        <td width="1%">
-            <table border="1" width="100%"><caption>WA</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NT</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>SA</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>Q</caption>
-                <tr>
-                    <td width="100%" bgcolor="red"></td>
-                    <td width="100%" bgcolor="blue"></td>
-                    <td width="100%" bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NSW</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>V</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>T</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
+
+![Dom_4](./images/Dominio_it4.png)
 
 7. iteración #4:  
 7.1- La cola devuelve $(NT,SA)$ y la cola queda:  
@@ -472,67 +229,9 @@ $[(V,SA),(Q,NSW),(NSW,Q),(NSW,V),(V,NSW),(NT,SA),(Q,SA),$
 $(NSW,SA),(V,SA),(WA,NT),(NT,Q),\textcolor{LimeGreen}{(WA,SA),(NT,SA),(Q,SA)}]$  
 
 Tabla de Dominio:
-<table aling="center" border="1">
-    <tr>
-        <td width="1%">
-            <table border="1" width="100%"><caption>WA</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NT</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>SA</caption>
-                <tr>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>Q</caption>
-                <tr>
-                    <td width="100%" bgcolor="red"></td>
-                    <td width="100%" bgcolor="blue"></td>
-                    <td width="100%" bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NSW</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>V</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>T</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
-  
+
+![Dom_12](./images/Dominio_it12.png)
+
 16. iteración #13:  
 16.1- La cola devuelve $(V,SA)$ y la cola queda:  
 $[(Q,NSW),(NSW,Q),(NSW,V),(V,NSW),(NT,SA),(Q,SA),(NSW,SA),$
@@ -578,65 +277,8 @@ $[(V,SA),(Q,NSW),(NSW,Q),(NSW,V),(V,NSW),(NT,SA),(Q,SA),$
 $(NSW,SA),(V,SA),(WA,NT),(NT,Q),\textcolor{LimeGreen}{(SA,NSW),(Q,NSW)}]$  
 
 Tabla de Dominio:
-<table aling="center" border="1">
-    <tr>
-        <td width="1%">
-            <table border="1" width="100%"><caption>WA</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NT</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>SA</caption>
-                <tr>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>Q</caption>
-                <tr>
-                    <td width="100%" bgcolor="red"></td>
-                    <td width="100%" bgcolor="blue"></td>
-                    <td width="100%" bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NSW</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>V</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>T</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table> 
+
+![Dom_17](./images/Dominio_it17.png)
 
 21. iteración #18:  
 21.1- La cola devuelve $(V,NSW)$ y la cola queda:  
@@ -659,64 +301,8 @@ $[(Q,SA),(NSW,SA),(V,SA),(WA,NT),(NT,Q),$
 $(WA,SA),(NT,SA),(Q,SA),(SA,NSW),(Q,NSW), \textcolor{LimeGreen}{(WA,NT),(Q,NT)}]$  
 
 Tabla de Dominio:
-<table aling="center" border="1">
-    <tr>
-        <td width="1%">
-            <table border="1" width="100%"><caption>WA</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NT</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>SA</caption>
-                <tr>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>Q</caption>
-                <tr>
-                    <td width="100%" bgcolor="red"></td>
-                    <td width="100%" bgcolor="blue"></td>
-                    <td width="100%" bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NSW</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>V</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>T</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table> 
+
+![Dom_19](./images/Dominio_it19.png)
 
 23. iteración #20:  
 23.1- La cola devuelve $(Q,SA)$ y la cola queda:  
@@ -731,63 +317,8 @@ $[(NSW,SA),(V,SA),(WA,NT),(NT,Q),(WA,SA),(NT,SA),$
 $(Q,SA),(SA,NSW),(Q,NSW), \textcolor{LimeGreen}{(NT,Q),(NSW,Q)}]$  
 
 Tabla de Dominio:
-<table aling="center" border="1">
-    <tr>
-        <td width="1%">
-            <table border="1" width="100%"><caption>WA</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NT</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>SA</caption>
-                <tr>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>Q</caption>
-                <tr>
-                    <td width="100%" bgcolor="red"></td>
-                    <td width="100%" bgcolor="blue"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NSW</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>V</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>T</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table> 
+
+![Dom_20](./images/Dominio_it20.png)
 
 24. iteración #21:  
 24.1- La cola devuelve $(NSW,SA)$ y la cola queda:  
@@ -802,64 +333,10 @@ $[[(V,SA),(WA,NT),(NT,Q),(WA,SA),(NT,SA),(Q,SA),(SA,NSW),$
 $(Q,NSW),(WA,NT),(Q,NT),(NT,Q),(NSW,Q), \textcolor{LimeGreen}{(Q,NSW),(V,NSW)}]$  
 
 Tabla de Dominio:
-<table aling="center" border="1">
-    <tr>
-        <td width="1%">
-            <table border="1" width="100%"><caption>WA</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NT</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>SA</caption>
-                <tr>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>Q</caption>
-                <tr>
-                    <td width="100%" bgcolor="red"></td>
-                    <td width="100%" bgcolor="blue"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NSW</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>V</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>T</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table> 
 
-24. iteración #21:  
+![Dom_21](./images/Dominio_it21.png)
+
+24. iteración #22:  
 24.1- La cola devuelve $(V,SA)$ y la cola queda:  
 $[(WA,NT),(NT,Q),(WA,SA),(NT,SA),(Q,SA),(SA,NSW),(Q,NSW),$
 $(WA,NT),(Q,NT),(NT,Q),(NSW,Q),(Q,NSW),(V,NSW)]$  
@@ -867,7 +344,7 @@ $(WA,NT),(Q,NT),(NT,Q),(NSW,Q),(Q,NSW),(V,NSW)]$
 24.3- Por cada color $x$ en $D_{NSW}$ comprueba que para todo color $y$ en $D_{SA}$ permita la asignación $(x,y)$ sin satisfacer alguna restricción.  
 24.4- La salida de **Revise()** retorna False.
 
-25. iteración #22:  
+25. iteración #23:  
 25.1- La cola devuelve $(WA,NT)$ y la cola queda:  
 $[(NT,Q),(WA,SA),(NT,SA),(Q,SA),(SA,NSW),(Q,NSW),$
 $(WA,NT),(Q,NT),(NT,Q),(NSW,Q),(Q,NSW),(V,NSW)]$  
@@ -875,7 +352,7 @@ $(WA,NT),(Q,NT),(NT,Q),(NSW,Q),(Q,NSW),(V,NSW)]$
 25.3- Por cada color $x$ en $D_{NSW}$ comprueba que para todo color $y$ en $D_{SA}$ permita la asignación $(x,y)$ sin satisfacer alguna restricción.  
 25.4- La salida de **Revise()** retorna False.
 
-26. iteración #23:  
+26. iteración #24:  
 26.1- La cola devuelve $(NT,Q)$ y la cola queda:  
 $[(WA,SA),(NT,SA),(Q,SA),(SA,NSW),(Q,NSW),(WA,NT),$
 $(Q,NT),(NT,Q),(NSW,Q),(Q,NSW),(V,NSW)]$  
@@ -883,7 +360,7 @@ $(Q,NT),(NT,Q),(NSW,Q),(Q,NSW),(V,NSW)]$
 26.3- Por cada color $x$ en $D_{NSW}$ comprueba que para todo color $y$ en $D_{SA}$ permita la asignación $(x,y)$ sin satisfacer alguna restricción.  
 26.4- La salida de **Revise()** retorna False.
 
-27. iteración #24:  
+27. iteración #25:  
 27.1- La cola devuelve $(NT,SA)$ y la cola queda:  
 $[(Q,SA),(SA,NSW),(Q,NSW),(WA,NT),(Q,NT),(NT,Q),$
 $(NSW,Q),(Q,NSW),(V,NSW)]$  
@@ -891,7 +368,7 @@ $(NSW,Q),(Q,NSW),(V,NSW)]$
 27.3- Por cada color $x$ en $D_{NT}$ comprueba que para todo color $y$ en $D_{SA}$ permita la asignación $(x,y)$ sin satisfacer alguna restricción.  
 27.4- La salida de **Revise()** retorna False.
 
-28. iteración #25:  
+28. iteración #26:  
 28.1- La cola devuelve $(Q,SA)$ y la cola queda:  
 $[(SA,NSW),(Q,NSW),(WA,NT),(Q,NT),
 $(NT,Q),(NSW,Q),(Q,NSW),(V,NSW)]$  
@@ -899,7 +376,7 @@ $(NT,Q),(NSW,Q),(Q,NSW),(V,NSW)]$
 28.3- Por cada color $x$ en $D_{Q}$ comprueba que para todo color $y$ en $D_{SA}$ permita la asignación $(x,y)$ sin satisfacer alguna restricción.  
 28.4- La salida de **Revise()** retorna False.
 
-29. iteración #26:  
+29. iteración #27:  
 29.1- La cola devuelve $(SA,NSW)$ y la cola queda:  
 $[(Q,NSW),(WA,NT),(Q,NT),(NT,Q),(NSW,Q),$
 $(Q,NSW),(V,NSW)]$  
@@ -907,7 +384,7 @@ $(Q,NSW),(V,NSW)]$
 29.3- Por cada color $x$ en $D_{SA}$ comprueba que para todo color $y$ en $D_{NSW}$ permita la asignación $(x,y)$ sin satisfacer alguna restricción.  
 29.4- La salida de **Revise()** retorna False.
 
-30. iteración #27:  
+30. iteración #28:  
 30.1- La cola devuelve $(Q,NSW)$ y la cola queda:  
 $[(WA,NT),(Q,NT),(NT,Q),(NSW,Q),(Q,NSW),(V,NSW)]$  
 30.2- Se ingresa al método **Revise()**  
@@ -919,63 +396,10 @@ $[[(WA,NT),(Q,NT),(NT,Q),(NSW,Q),(Q,NSW),$
 $(V,NSW),\textcolor{LimeGreen}{(NT,Q),(SA,Q)}]$  
 
 Tabla de Dominio:
-<table aling="center" border="1">
-    <tr>
-        <td width="1%">
-            <table border="1" width="100%"><caption>WA</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NT</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>SA</caption>
-                <tr>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>Q</caption>
-                <tr>
-                    <td width="100%" bgcolor="blue"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NSW</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>V</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>T</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
 
-31. iteración #28:  
+![Dom_28](./images/Dominio_it28.png)
+
+31. iteración #29:  
 31.1- La cola devuelve $(WA,NT)$ y la cola queda:  
 $[(Q,NT),(NT,Q),(NSW,Q),(Q,NSW),$
 $(V,NSW),(NT,Q),(SA,Q)]$  
@@ -983,7 +407,7 @@ $(V,NSW),(NT,Q),(SA,Q)]$
 31.3- Por cada color $x$ en $D_{WA}$ comprueba que para todo color $y$ en $D_{NT}$ permita la asignación $(x,y)$ sin satisfacer alguna restricción.  
 31.4- La salida de **Revise()** retorna False.
 
-32. iteración #29:  
+32. iteración #30:  
 32.1- La cola devuelve $(Q,NT)$ y la cola queda:  
 $[(NT,Q),(NSW,Q),(Q,NSW),(V,NSW),$
 $(NT,Q),(SA,Q)]$  
@@ -994,61 +418,8 @@ $(NT,Q),(SA,Q)]$
 32.6- Retorna Falso.
 
 Tabla de Dominio:
-<table aling="center" border="1">
-    <tr>
-        <td width="1%">
-            <table border="1" width="100%"><caption>WA</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NT</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>SA</caption>
-                <tr>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>Q</caption>
-                <tr>
-                    <td bgcolor="black"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>NSW</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>V</caption>
-                <tr>
-                    <td bgcolor="blue"></td>
-                </tr>
-            </table>
-        </td>
-        <td width="1%">
-            <table border="1"><caption>T</caption>
-                <tr>
-                    <td bgcolor="red"></td>
-                    <td bgcolor="blue"></td>
-                    <td bgcolor="yellow"></td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
+
+![Dom_30](./images/Dominio_it30.png)
 
 ### Conclusión
 
@@ -1062,7 +433,7 @@ La complejidad del algoritmo *AC-3* en un grafo es $O(cd^3)$.
 
 Al tratarse de un árbol sabemos que la cola del algoritmo se inicia con una cantidad de arcos $(n-1)$ siendo $n$ la cantidad de variables o nodos en el árbol, los arcos deben estar ordenados de manera que el padre de un nodo siempre aparezca antes que el nodo.
 
-El método $REVISE()$ en el peor caso tienen una complejidad de $d^2$ siendo $d$ la cardinalidad del dominio $D_i$ de la variable $X_i$. 
+El método $REVISE()$ en el peor caso tienen una complejidad de $d^2$ siendo $d$ la cardinalidad del dominio $D_i$ de la variable $X_i$.  
 
 De esta manera no es necesario revisar los arcos en ambos sentidos ya que si el padre es arco consistente con su hijo entonces cualquier asignación al padre nos asegurará existen valores para sus hijos.
 
@@ -1072,9 +443,9 @@ Nos devuelve una complejidad temporal $O(nd^2)$
 
 Si cada nodo $X_i$ del grafo, representando una variable del CSP, tiene un contador por cada variable adyacente $X_k$, donde se lleva cuenta de la cantidad de valores del dominio $D_i$ que son consistentes con **todos** los valores del dominio $D_k$. Entonces, puede lograrse una complejidad de $O(n^2d^2)$.
 
-El algoritmo iniciará con todos los contadores en $0$, luego estos se actualizarán en cada iteración con la función $REVISE(X_i,X_j)$. 
+El algoritmo iniciará con todos los contadores en $0$, luego estos se actualizarán en cada iteración con la función $REVISE(X_i,X_j)$.  
 
-La función $REVISE$ suma una unidad a una variable local $count$ por cada valor de $x$ de $D_i$ que no presente inconsistencia con **ninguna** variable $y$ de %D_j%. Y antes de retornar el valor de $revised$, Se actualiza el contador de $X_i$ respecto a $X_j$ asignándole el valor de $count$ y el de $X_j$ respecto a $X_i$ asignándole el resultado de  $ \#(D_j) - \#(D_i) + count$.
+La función $REVISE$ suma una unidad a una variable local $count$ por cada valor de $x$ de $D_i$ que no presente inconsistencia con **ninguna** variable $y$ de $D_j$. Y antes de retornar el valor de $revised$, Se actualiza el contador de $X_i$ respecto a $X_j$ asignándole el valor de $count$ y el de $X_j$ respecto a $X_i$ asignándole el resultado de  $ \#(D_j) - \#(D_i) + count $ .
 
 Finalmente cuando el bucle for quiera agregar un arco $(X_k,X_i)$ deberá revisar si el contador de $X_i$ respecto a $X_k$ tiene es igual a $0$. Si se cumple entonces agrega el arco a la cola.
 
@@ -1106,18 +477,18 @@ La complejidad de REVISE siguie siendo $O(d^2)$ pero la cantidad de arcos que se
 
 ## 5. Demostrar que para un CSP cuyo grafo de restricciones es un árbol estructurado con 2-consistencia implica que tiene n-consistencia (siendo n número total de variables)
 
-$Q(N):=$ un árbol estructurado CSP $T$ es $N$-constistente  
+$Q(N):=$ un árbol estructurado CSP $T$ es $N$-consistente  
 
 Se debe demostrar:  
 $$Q(2) \implies Q(n)$$  
 
-### Demostracion por induccion
+### Demostración por inducción
 
 #### Paso base
 
 $Q(2) \implies Q(3)$
 
-Para verificar 3-consistencia o consistencia de camino en un grafo se puede tomar todo camino $(X_i,X_m,X_j)$ y verificar que exista al menos 1 valor en el dominio de cada varible que permita una asignación consistente.  
+Para verificar 3-consistencia o consistencia de camino en un grafo se puede tomar todo camino $(X_i,X_m,X_j)$ y verificar que exista al menos 1 valor en el dominio de cada variable que permita una asignación consistente.  
 
 Si queremos comprobar si hay consistencia de camino en la terna, y teniendo en cuenta de que se trata de un árbol (no hay ciclos), simplemente podemos verificar que los arcos $(X_i,X_m)$ y $(X_m,X_j)$ son arco consistentes.
 
@@ -1131,21 +502,26 @@ $Q(k) \implies Q(k+1)$
 
 Para verificar si un grafo es (k+1)-consistente debemos verificar que para toda (k+1)-upla $(X_i,X_j,...,X_k,X_{k+1})$ existe almenos un valor en el dominio de cada variable que permita consistencia.  
 
-Teniendo en cuenta que se trata de un árbol (no tiene ciclos). Podemos verificar que cada (k+1)-umpla es consistente verificando que cada k-upla, que sea subtupla, es k-consistente.  
+Teniendo en cuenta que se trata de un árbol (no tiene ciclos). Podemos verificar que cada (k+1)-upla es consistente verificando que cada k-upla, que sea subdupla, es k-consistente.  
 
 Es decir, debemos verificar que $(X_i,X_j,...,X_k)$,...,$(X_j,...,X_k,X_{k+1})$ son k-consistentes. Esto es verdadero por hipótesis. Por lo tanto, toda (k+1)-upla del árbol es (k+1)-consistente, entonces el árbol es (k+1)-consistente. 
 
 Queda demostrado que $Q(2) \implies Q(n)$
 
-[MapaAutralia]:MapaAustralia.png
-[AC-3]:AlgoritmoAC-3.png
-[Cuadricula]:Cuadicula.png
+[AC-3]:./images/AlgoritmoAC-3.png
+
+[Cuadricula]:./images/Cuadicula.png
 
 ## Results
 
-#### Conclusión
-Como el problema de las n reinas es un csp y por lo tanto no importa el orden de asignacion de las variables he decidido colocar las reinas de izquierda a derecha, por esta razon todas las soluciones son la misma en cada iteracion y la cantidad de estados explorados támbien. Por esto es que no existen gran candtidad de variaciones
-#### Cantidad de estados explorados
+### Conclusión
+
+Como el problema de las n reinas es un csp y por lo tanto no importa el orden de asignación de las variables he decidido colocar las reinas de izquierda a derecha, por esta razón todas las soluciones son la misma en cada iteración y la cantidad de estados explorados también. Por esto es que no existen gran cantidad de variaciones
+
+### Cantidad de estados explorados
+
 !["Cantidad de estados explorados"](./ResultSet/BoxPlot-ExploredStates.png)
-#### Tiempo transcurrido de cada algoritmo
+
+### Tiempo transcurrido de cada algoritmo
+
 ![""](./ResultSet/BoxPlot-Time.png)
