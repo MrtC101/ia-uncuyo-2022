@@ -122,6 +122,7 @@ sensitivity<-function(TP,FN) round(TP/(TP+FN),3)
 specificity<-function(TN,FP) round(TN/(TN+FP),3)
 negativePredictive<-function(TN,FN) round(TN/(TN+FN),3)
 precision<-function(TP,FP) round(TP/(TP+FP),3)
+accuracy<-function(TP,TN,FP,FN) round((TP+TN)/(TP+TN+FP+FN),3)
 
 getConfusionMatrix<-function(actual_class,predicted_class){
   n<-length(actual_class)
@@ -134,7 +135,7 @@ getConfusionMatrix<-function(actual_class,predicted_class){
   f1 <-c(n,"Predicted Positive","Predicted Negative","total")
   f2 <-c("Actual Positive",TP,FN,sensitivity(TP,FN))
   f3 <-c("Actual Negative",FP,TN,specificity(FP,TN))
-  f4 <-c("total",precision(TP,FP),negativePredictive(FN,TN),"")
+  f4 <-c("total",precision(TP,FP),negativePredictive(FN,TN),accuracy(TP,TN,FP,FN))
   cofusionMatrix <- rbind(f1,f2,f3,f4)
   return(cofusionMatrix)
 }
@@ -154,11 +155,9 @@ print(getConfusionMatrix(validation$inclinacion_peligrosa,validation$prediction_
 create_folds<-function(dataset,amount){
   folds<-list()
   size<-trunc(nrow(dataset)/amount)
-  j<-1
   for(i in seq(1,amount)){
     idx <- sample(rownames(dataset),size)
-    folds <- append(folds,list(as.numeric(idx)))
-    j<-j+1
+    folds <- append(folds,list(idx))
   }
   return(folds)
 }
@@ -168,7 +167,9 @@ promConfus<-function(listofConfus,folds){
   TN<-0
   FP<-0
   FN<-0
+  n <- 0
   for(i in seq(1,folds)){
+    n <- as.numeric(listofConfus[[i]][1,1]) + n
     TP <- as.numeric(listofConfus[[i]][2,2]) + TP
     TN <- as.numeric(listofConfus[[i]][3,3]) + TN
     FP <- as.numeric(listofConfus[[i]][3,2]) + FP
@@ -178,10 +179,10 @@ promConfus<-function(listofConfus,folds){
   TN<-TN/folds
   FP<-FP/folds
   FN<-FN/folds
-  f1 <-c( as.numeric(listofConfus[[1]][1,1]),"Predicted Positive","Predicted Negative","total")
+  f1 <-c(n,"Predicted Positive","Predicted Negative","total")
   f2 <-c("Actual Positive",TP,FN,sensitivity(TP,FN))
   f3 <-c("Actual Negative",FP,TN,specificity(FP,TN))
-  f4 <-c("total",precision(TP,FP),negativePredictive(FN,TN),"")
+  f4 <-c("total",precision(TP,FP),negativePredictive(FN,TN),accuracy(TP,TN,FP,FN))
   matrix<-rbind(f1,f2,f3,f4)
   return(matrix)
 }
@@ -198,14 +199,9 @@ cross_validation<-function(dataframe,foldsNum){
     }
     trainSet<-dataframe[trainIdx,]
     testSet<-dataframe[testIdx,]
-    
-    trainSet$inclinacion_peligrosa<-factor(trainSet$inclinacion_peligrosa)
-    trainSet$altura<-factor(trainSet$altura)
-    trainSet$circ_tronco_cm_cat<-factor(trainSet$circ_tronco_cm_cat)
-    
-    tree_model <- rpart(inclinacion_peligrosa ~especie+altura+circ_tronco_cm_cat+diametro_tronco+long+lat+seccion+area_seccion,data=trainSet)
-    
-    print(rpart.plot::rpart.plot(tree_model))
+    tree_model<-rpart(inclinacion_peligrosa ~especie+altura+circ_tronco_cm_cat+seccion+diametro_tronco,data=trainSet,
+                      minbucket=10,minsplit=3,maxdepth=6,cp=0.0001)
+    rpart.plot::rpart.plot(tree_model)
     
     predicted_class<-predict(tree_model,testSet,type="class")
     resultMatrix[[i]]<-getConfusionMatrix(testSet$inclinacion_peligrosa,predicted_class)
@@ -213,10 +209,20 @@ cross_validation<-function(dataframe,foldsNum){
   matrix<-promConfus(resultMatrix,foldsNum)
   return(matrix)
 }
-validation <- read.csv("C:\\Users\\MrtC101\\Desktop\\Ciencias en Computacion\\Cursado\\3.2Inteligencia Artificial I\\repositorio\\tp7-ml\\data\\arbolado-publico-mendoza-2021-validation.csv")
-validation<-addCircCat(validation)
-print(cross_validation(validation,2))
 
-tree_model <- rpart(inclinacion_peligrosa ~especie+altura+circ_tronco_cm_cat+diametro_tronco+long+lat+seccion+area_seccion,data=validation)
+train <- read.csv("C:\\Users\\MrtC101\\Desktop\\Ciencias en Computacion\\Cursado\\3.2Inteligencia Artificial I\\repositorio\\tp7-ml\\data\\arbolado-publico-mendoza-2021-circ_tronco_cm-train.csv")
+train$especie<-factor(train$especie)
+train$altura<-factor(train$altura)
+train$circ_tronco_cm_cat <- factor(train$circ_tronco_cm_cat)
+train$inclinacion_peligrosa<-factor(train$inclinacion_peligrosa)
+print(cross_validation(train,3))
 
+
+
+####
+tree_model<-rpart(inclinacion_peligrosa ~especie+altura+circ_tronco_cm_cat+seccion+diametro_tronco,data=train,
+                  minbucket=2,minsplit=3,cp=0.0001)
 rpart.plot::rpart.plot(tree_model)
+
+predicted_class<-predict(tree_model,train,type="class")
+getConfusionMatrix(train$inclinacion_peligrosa,predicted_class)
