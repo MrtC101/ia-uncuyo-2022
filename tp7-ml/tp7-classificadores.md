@@ -5,14 +5,14 @@
 
 |     6383      |Predicted Positive|Predicted Negative|total|
 |:-------------:|:----------------:|:----------------:|:---:|
-|Actual Positive|       382        |       2903       |0.116|
-|Actual Negative|       372        |       2726       |0.12 | 
-|     total     |      0.507       |       0.516      |0.487|
+|Actual Positive|       378        |       333       |0.532|
+|Actual Negative|       2789        |       2883       |0.492| 
+|     total     |      0.119       |       0.104      |0.511|
 
 ## Clasificador mayoritaria ##
 
 |     6383      |Predicted Positive|Predicted Negative|total|
 |:-------------:|:----------------:|:----------------:|:---:|
-|Actual Positive|         0        |         0        | NaN |
-|Actual Negative|       754        |        5629      |0.118| 
-|     total     |         0        |         0        |0.882|
+|Actual Positive|         0        |        711       |  0  |
+|Actual Negative|         0        |        5629      |  0  | 
+|     total     |        NaN       |       0.111      |0.889|

@@ -15,27 +15,28 @@ create_folds<-function(dataset,amount){
 ```
 
 ```R
-cross_validation<-function(dataframe,foldsNum){
+cross_validation<-function(dataframe,formula,foldsNum,settings){
   folds<-create_folds(dataframe,foldsNum) 
   resultMatrix<-list()
   for(i in seq(1,foldsNum)){
-    #indices
     testIdx <- folds[[i]]
     trainFolds <- folds[-i]
     trainIdx <- c()
     for(j in seq(1,length(trainFolds))){
       trainIdx <- append(trainIdx,trainFolds[[j]])
     }
-    #Sets
+    
     trainSet<-dataframe[trainIdx,]
     testSet<-dataframe[testIdx,]
-    #Model
-    tree_model<-rpart(inclinacion_peligrosa ~especie+altura+circ_tronco_cm_cat+seccion+diametro_tronco,data=trainSet,
-                      minbucket=2,minsplit=3,maxdepth=6,cp=0.00001)
-    rpart.plot::rpart.plot(tree_model)
-    #Result table
+    
+    tree_model<-rpart(formula=formula, data=trainSet,
+                      cp = settings[1],minsplit = settings[2],
+                      minbucket=settings[3], maxdepth = settings[4])
+    #summary(tree_model)
+    print(tree_model)
+    #rpart.plot(tree_model)
     predicted_class<-predict(tree_model,testSet,type="class")
-    resultMatrix[[i]]<-getConfusionMatrix(testSet$inclinacion_peligrosa,predicted_class)
+    resultMatrix[[i]]<-getConfusionMatrix(testSet[[length(testSet)]],predicted_class)
   }
   matrix<-promConfus(resultMatrix,foldsNum)
   return(matrix)
@@ -46,17 +47,17 @@ cross_validation<-function(dataframe,foldsNum){
 
 ### Matriz de confusion ###
 
-|     25527     |Predicted Positive|Predicted Negative|total|
+|     31911     |Predicted Positive|Predicted Negative|total|
 |:-------------:|:----------------:|:----------------:|:---:|
-|Actual Positive|       5.667      |         3        |0.654|
-|Actual Negative|       969.667    |     7530.667     |0.114| 
-|     total     |       0.006      |         0        |0.886|
+|Actual Positive|       146.333      |        1040        |0.123|
+|Actual Negative|       161    |     9289.667     |0.017| 
+|     total     |       0.476      |       0.101        |0.887|
 
 ### Desviación Estándar ###
 
 |D.E|values|
 |:-:|:----:|
-| TP|1.155 |
-| FP|13.868|
-| TN|13.051|
-| FN|0     |
+| TP|19.858|
+| FP|10.536|
+| TN|37.166|
+| FN|12.166|
