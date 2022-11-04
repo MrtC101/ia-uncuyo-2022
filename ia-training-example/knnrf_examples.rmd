@@ -1,0 +1,108 @@
+---
+title: "KNN and Random Forest and other ML algorithms"
+output: html_notebook
+---
+
+# KNN
+
+```{r}
+data(iris)
+## split in train/test 
+idx<-sample(150,50)
+trainset<-iris[-idx,]
+testset<-iris[idx,]
+
+knn_model <- caret::knn3(Species ~ .,data = trainset, k=3)
+
+# predictins on trainset
+predictions <- predict(knn_model,trainset,type="class")
+caret::confusionMatrix(predictions,trainset$Species)
+
+# Prediction on testset
+predictions <- predict(knn_model,testset,type="class")
+# Calculate Confusion MAtrix
+caret::confusionMatrix(predictions,testset$Species)
+```
+
+# Random Forest
+
+```{r}
+library(randomForest)
+library(dplyr)
+data(iris)
+#set.seed(71)
+
+idx<-sample(150,50)
+trainset<-iris[-idx,]
+testset<-iris[idx,]
+
+iris.rf <- randomForest(Species ~ Petal.Width, data=trainset)
+iris.rf <- randomForest(Species ~ ., data=trainset,)
+
+# Calculate importance
+importance(iris.rf)
+predictions<-predict(iris.rf,testset)
+caret::confusionMatrix(as.factor(predictions),testset$Species)
+```
+
+# ARBOLES DE DECISION
+
+El paquete `rpart` implementa un tipo de arbol de decision (CART)
+
+```{r}
+library(rpart)
+library(rpart.plot)
+idx<-sample(150,50)
+trainset<-iris[-idx,]
+testset<-iris[idx,]
+
+iris.rpart<-rpart(Species ~., data=trainset)
+rpart.plot(iris.rpart)
+
+predictions <- predict(iris.rpart,testset,type="class")
+caret::confusionMatrix(predictions,testset$Species)
+```
+
+## Naive Bayes
+```{r}
+data(iris)
+library(naivebayes)
+m <- naivebayes::naive_bayes(Species~., data = iris)
+preds<- predict(m,newdata=iris,type='prob')
+apply(preds, 1,
+      function(x) {
+        names(x)[which.max(x)]
+      })
+
+
+```
+
+
+## Caret
+
+Lo mismo pero utilizando el paquete  Caret que nos permite cambiar facilmente el algoritmo a utilizar
+```{r}
+library(caret)
+ctrl_fast <- trainControl(method="cv", 
+                     number=5, 
+                     verboseIter=T,
+                     classProbs=F,
+                     allowParallel = TRUE)  
+```
+
+
+```{r}
+train_formula<-formula(Species~.)
+
+model_caret<- train(train_formula,
+               data = iris,
+               method = "naive_bayes",
+               #method = "rf",
+               #method = "knn",
+               trControl = ctrl_fast)
+
+model_caret
+model_caret$finalModel
+```
+
+
