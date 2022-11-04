@@ -7,6 +7,9 @@ library(cowplot)
 library(rpart)
 library(rpart.plot)
 
+addEspecieCat<-
+
+
 getn <- function(val){
   n <- ifelse(val > 300 ,1,
               ifelse(val> 200 ,2,
@@ -20,8 +23,7 @@ addCircCat<-function(dataset){
   for(i in seq(1,nrow(dataset))){
     cat_vector <- c(cat_vector,switch(getn(dataset[i,"circ_tronco_cm"]) ,"muy alto","alto","medio","bajo"))
   }
-  dataset$circ_tronco_cm_cat <- cat_vector
-  return(dataset)
+  return(cat_vector)
 }
 
 predictProb<-function(dataframe){
@@ -130,12 +132,4 @@ cross_validation<-function(dataframe,formula,foldsNum,settings){
   }
   matrix<-promConfus(resultMatrix,foldsNum)
   return(matrix)
-}
-
-modifyDataSet<-function(dataset){
-  dataset$diametro_tronco<-factor(dataset$diametro_tronco)
-  dataset$especie<-as.numeric(factor(dataset$especie))
-  dataset$seccion<-factor(dataset$seccion)
-  dataset$altura<-factor(dataset$altura)
-  return(dataset[,-c(3,5,10,11)])
 }
