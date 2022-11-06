@@ -1,6 +1,6 @@
-# Generación de reglas de asociación espaciales con bloques de Minecraft #
+# Mineria de reglas reglas de asociación espaciales sobre bloques de Minecraft #
 
-## Código RANDOBJGEN ##
+## Código MINECRAFT_ASSO_MINING ##
 
 ***Martín Cogo Belver***
 
@@ -55,26 +55,3 @@ De ahí que sea necesario la utilización de un algoritmo de machine learning pa
 ## Cronograma estimado de actividades ##
 
 1. b
-
-## Bibliografía ##
-
-[Clasificación de objetos mediante momentos de
-Hahn 3D y aprendizaje profundo](https://rcs.cic.ipn.mx/2020_149_8/Clasificacion%20de%20objetos%20mediante%20momentos%20de%20Hahn%203D%20y%20aprendizaje%20profundo.pdf)
-
-[DISEÑO DE ALGORITMO DE GENERACIÓN
-PROCEDURAL ENFOCADO A VIDEOJUEGOS](https://repositorio.usm.cl/bitstream/handle/11673/49444/3560902038911UTFSM.pdf?sequence=1&isAllowed=y)
-(https://www.alanzucconi.com/2022/06/05/minecraft-world-generation/)
-(https://www.youtube.com/watch?v=fpGsOdxcU2M&ab_channel=ParametricCamp)
-(https://unmined.net)
-(https://www.reddit.com/r/VoxelGameDev/comments/8c4a67/a_better_way_to_extract_minecraft_data/)
-(https://pessimistress.github.io/minecraft/)
-(https://github.com/Pessimistress/minecraft-chunk-viewer)
-(https://minecraft.fandom.com/wiki/Region_file_format)
-(https://wiki.vg/Region_Files)
-(https://minecraft.fandom.com/es/wiki/Formato_NBT)
-(https://github.com/mstefarov/fNbt)
-[Spacial association rules](https://link.springer.com/chapter/10.1007/3-540-60159-7_4)
-[Presentaicon Spacial associatuib ryeks](https://www.ismll.uni-hildesheim.de/lehre/spatial-09w/script/association_web.pdf)
-["Algoritmo ESPADA implementado en Prolog para inferencia de spatial association rules"](https://edz.bib.uni-mannheim.de/www-edz/pdf/eurostat/02/KS-CS-02-001-EN-N-EN.pdf#page=26)
-["Metricas para reglas de associacion"](https://towardsdatascience.com/association-rules-2-aa9a77241654)
-["Apriori en R"](https://www.geeksforgeeks.org/association-rule-mining-in-r-programming/#:~:text=Association%20Rule%20Mining%20in%20R%20Language%20is%20an%20Unsupervised%20Non,in%20a%20transaction%20or%20relation.)
