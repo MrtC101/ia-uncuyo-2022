@@ -3,14 +3,10 @@ library(ggplot2)
 library(dplyr) # for data manipulation
 library(caret) # for model-building
 library(pROC) # for AUC calculations
-source(".\\code\\R\\Operations.r")
+source(".\\code\\R\\Operations.R")
 
 
-#Import Dataset
-arbolado_mza_dataset <- read_csv("data/PuntoB/arbolado-publico-mendoza-2021/arbolado-mza-dataset/arbolado-mza-dataset.csv")
-arbolado_mza_dataset_test <- read_csv("data/PuntoB/arbolado-publico-mendoza-2021/arbolado-mza-dataset-test/arbolado-mza-dataset-test.csv")
 
-#Modify Dataset
 
 turnToNumeric<-function(dataset){
   for(i in seq(1,length(dataset))){
@@ -21,61 +17,37 @@ turnToNumeric<-function(dataset){
   return(dataset)
 }
 
-setRate<-function(row,dataset){
-  if(length(row)==length(dataset)){
-    attsRate <-c() 
-    for(att in seq(2,length(dataset))){
-      sum <- 0
-      if(names(dataset)[att]!="inclinacion_peligrosa"){
-        for(r in seq(1,nrow(dataset))){
-          sum <- sum + abs(row[att] - dataset[r,att])
-        }
-        attsRate<-rbind(attsRate,c(sum/nrow(dataset))[[1]])
-      }
-    }  
-  }
-  attsRate<-rbind(attsRate,sum(attsRate))
-  return(attsRate)
+
+preProcess<-function(dataset){
+  dataset$cric_tronco_cm_cat<-factor(addCircCat(dataset))
+  dataset$cric_diamtero_cm<-addDiametro(dataset)
+  dataset$esbeltez<-addEsbeltez(dataset)
+  dataset$rareza_de_altura<-factor(addRarezaAltura(dataset))
+  return(dataset)
 }
 
-addFeatures<-function(dataset){
-  arboles<-turnToNumeric(dataset)
-  orig_size<-length(arboles)
-  new_att <- orig_size-1
-  new_columns<-seq(orig_size+1, orig_size + new_att )
-  old_columns<-seq(1,orig_size)
-  
-  arboles[,new_columns] <- NaN
-  names(arboles)[length(arboles)]<-"puntaje"
-  arboles[arboles$inclinacion_peligrosa == 1,new_columns] <- 0
-  arboles_peligrosos <- arboles[arboles$inclinacion_peligrosa == 1,old_columns]
-  for(row in seq(1,nrow(arboles))){
-    print(row)
-    arbol<-arboles[row,old_columns]
-    if(arbol$inclinacion_peligrosa == 0){
-      rates <- setRate(arbol,arboles_peligrosos)
-      arboles[row,new_columns]<-as.list(rates)  
-    }
-  }
-  return(arboles)
-}
-
-modifyDataSet<-function(dataset){
+toFractor<-function(dataset){
   dataset$especie<-factor(dataset$especie)
   dataset$altura<-factor(dataset$altura)
   dataset$diametro_tronco<-factor(dataset$diametro_tronco)
   dataset$seccion<-factor(dataset$seccion)
-  dataset$cric_tronco_cm_cat<-factor(addCircCat(dataset))
-  dataset<-dataset[,-c(3,10,11)]
   return(dataset)
 }
 
-arbolado_mza_dataset <- modifyDataSet(arbolado_mza_dataset)
-arbolado_mza_dataset_numeric <- addFeatures(arbolado_mza_dataset[seq(1,600),])
-write.csv(arbolado_mza_dataset_numeric,".//data//PuntoB//arbolado-mza-dataset-featured.csv")
-arbolado_mza_dataset_numeric <- addFeatures(arbolado_mza_dataset_test)
+#Import Dataset
+arbolado_mza_dataset <- read_csv("data/PuntoB/arbolado-publico-mendoza-2021/arbolado-mza-dataset/arbolado-mza-dataset.csv")
 
-arbolado_mza_dataset<-arbolado_mza_dataset_numeric
+#Modify Dataset
+arbolado_mza_dataset<-arbolado_mza_dataset[,-c(3)]
+arbolado_mza_dataset <- toFractor(arbolado_mza_dataset)
+arbolado_mza_dataset <- preProcess(arbolado_mza_dataset)
+write.csv(arbolado_mza_dataset,".//data//PuntoB//arbolado-mza-dataset-featured.csv",row.names = FALSE)
+
+arbolado_mza_dataset<-read_csv(".//data//PuntoB//arbolado-mza-dataset-featured.csv")
+arbolado_mza_dataset <- toFractor(arbolado_mza_dataset)
+arbolado_mza_dataset$rareza_de_altura<-factor(arbolado_mza_dataset$rareza_de_altura)
+
+#arbolado_mza_dataset<-turnToNumeric(arbolado_mza_dataset)
 arbolado_mza_dataset<-arbolado_mza_dataset %>% mutate(inclinacion_peligrosa=ifelse(inclinacion_peligrosa=='1','si','no'))
 arbolado_mza_dataset$inclinacion_peligrosa <-as.factor(arbolado_mza_dataset$inclinacion_peligrosa)
 
@@ -97,18 +69,18 @@ freq(trainingSet,plot = FALSE)
 ctrl <- trainControl(
                     method = "repeatedcv",
                      number = 3,
-                     repeats = 0,
+                     #repeats = 1,
                      classProbs = TRUE,
                      verboseIter = TRUE,
                      p = 0.90,
-                     sampling = "up"
+                     sampling = "smote"
                      )
 
 #fold seed
-set.seed(1111)
+set.seed(3333)
 
 #training
-form<-formula(inclinacion_peligrosa ~.)
+form<-formula(inclinacion_peligrosa ~ especie + circ_tronco_cm + diametro_tronco + long + lat + seccion + esbeltez + rareza_de_altura)
 
 #wight not working(best 0.6 without tune)
 createWeightModel<-function(data,weightDiff){
@@ -120,27 +92,38 @@ createWeightModel<-function(data,weightDiff){
   return(m)  
 }
 
-tune <- expand.grid(.mincriterion = 0.70, 
-                    .maxdepth = as.numeric(seq(3,10,1)))
-model_tree<-train(form,
-                    data = trainingSet,
-                  #weights = createWeightModel(trainingSet,0.6),
+tune <- expand.grid(.mincriterion = as.numeric(0.5), 
+                    .maxdepth = as.numeric(10)
+)
+
+#weights = createWeightModel(trainingSet,0.6),
+
+model_tree<-train(form,data = trainingSet,
                     tuneGrid = tune,
                     method = "ctree2",
                     metric = "ROC",
                     trControl = ctrl)
-  
+plot(model_tree$finalModel)
 #Validation
-preds=predict(model_tree,validationSet,type='prob')
-if(unique(validationSet$inclinacion_peligrosa)[1] == "no"){
+preds=predict(model_tree,validationSet,type='raw')
+if(unique(validationSet$inclinacion_peligrosa)[1] == "no" | unique(validationSet$inclinacion_peligrosa)[1] == "si"){
   validationSet$inclinacion_peligrosa <- ifelse(validationSet$inclinacion_peligrosa == "si",1,0)
 }
-preds <- ifelse(preds$si >= 0.5,1,0)
+if(unique(preds)[1] == "no" | unique(preds)[1] == "si"){
+  preds <- ifelse(preds == "si",1,0)
+}else{
+  preds <- ifelse(preds$si >= 0.5,1,0)
+}
 print(getConfusionMatrix(validationSet$inclinacion_peligrosa,preds))
 
 #Submission
-testSet<- modifyDataSet(arbolado_mza_dataset_test)
+arbolado_mza_dataset_test <- read_csv("data/PuntoB/arbolado-publico-mendoza-2021/arbolado-mza-dataset-test/arbolado-mza-dataset-test.csv")
+
+testSet <- toFractor(arbolado_mza_dataset_test)
+testSet <- preProcess(testSet)
+#testSet <- turnToNumeric(testSet)
+
 preds=predict(model_tree,testSet,type='raw')
 preds<- ifelse(preds == "si",1,0)
 submission<-data.frame(id=testSet$id,inclinacion_peligrosa=preds)
-write_csv(submission,"./data/PuntoB/Envios/arbolado-mza-dataset-envio-9.csv")
+write_csv(submission,"./data/PuntoB/Envios/arbolado-mza-dataset-envio-15.csv")

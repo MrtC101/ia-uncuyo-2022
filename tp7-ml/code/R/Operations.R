@@ -7,24 +7,44 @@ library(cowplot)
 library(rpart)
 library(rpart.plot)
 
-addEspecieCat<-
+addRarezaAltura<-function(dataset){
+  l <- list()
+  for(i in unique(dataset$especie)){
+    especieSet<-dataset[dataset$especie==i,"altura"]
+    categories <- freq(especieSet)[,1]
+    rarity <-switch(length(categories),c("normal"),c("común","raro"),c("común","normal","raro"),c("muy común","normal","raro","muy raro"))
+    l[i] <- list(rbind(categories,rarity))
+  }
+  arr <- c()
+  for(j in seq(1,length(l[dataset$especie]))){
+    freqMat<-l[as.character(dataset$especie)][[j]]
+    altura<-dataset[[j,"altura"]]
+    alturaIdx<-which(freqMat[1,] == as.character(altura))
+    if(length(alturaIdx) < 1){
+      print(j)
+    }
+    arr <- rbind(arr,freqMat[2,alturaIdx])
+  }
+  return(arr)
+}
 
-
-getn <- function(val){
-  n <- ifelse(val > 300 ,1,
-              ifelse(val> 200 ,2,
-                     ifelse(val> 100,3,4)
-              )
-  )
+addEsbeltez <- function(dataset){
+  numAltura <- as.numeric(dataset$altura)
+  arr<- numAltura*dataset$cric_diamtero_cm
+  return(arr)
 }
 
 addCircCat<-function(dataset){
-  cat_vector <- vector("character",length = 0)
-  for(i in seq(1,nrow(dataset))){
-    cat_vector <- c(cat_vector,switch(getn(dataset[i,"circ_tronco_cm"]) ,"muy alto","alto","medio","bajo"))
-  }
-  return(cat_vector)
+  col<-pull(dataset,"circ_tronco_cm")
+  arr <- ifelse(col > 300 ,"muy alto",ifelse(col > 200 ,"alto",ifelse(col > 100,"medio","bajo")))
+  return(arr)
 }
+
+addDiametro<-function(dataset){
+  arr <- 3.14*pull(dataset,"circ_tronco_cm")
+  return(arr)
+}
+
 
 predictProb<-function(dataframe){
   size<-nrow(dataframe)
@@ -132,4 +152,43 @@ cross_validation<-function(dataframe,formula,foldsNum,settings){
   }
   matrix<-promConfus(resultMatrix,foldsNum)
   return(matrix)
+}
+
+setRate<-function(row,dataset){
+  if(length(row)==length(dataset)){
+    attsRate <-c() 
+    for(att in seq(2,length(dataset))){
+      sum <- 0
+      if(names(dataset)[att]!="inclinacion_peligrosa"){
+        for(r in seq(1,nrow(dataset))){
+          sum <- sum + abs(row[att] - dataset[r,att])
+        }
+        attsRate<-rbind(attsRate,c(sum/nrow(dataset))[[1]])
+      }
+    }  
+  }
+  attsRate<-rbind(attsRate,sum(attsRate))
+  return(attsRate)
+}
+
+addFeatures<-function(dataset){
+  arboles<-turnToNumeric(dataset)
+  orig_size<-length(arboles)
+  new_att <- orig_size-1
+  new_columns<-seq(orig_size+1, orig_size + new_att )
+  old_columns<-seq(1,orig_size)
+  
+  arboles[,new_columns] <- NaN
+  names(arboles)[length(arboles)]<-"puntaje"
+  arboles[arboles$inclinacion_peligrosa == 1,new_columns] <- 0
+  arboles_peligrosos <- arboles[arboles$inclinacion_peligrosa == 1,old_columns]
+  for(row in seq(1,nrow(arboles))){
+    print(row)
+    arbol<-arboles[row,old_columns]
+    if(arbol$inclinacion_peligrosa == 0){
+      rates <- setRate(arbol,arboles_peligrosos)
+      arboles[row,new_columns]<-as.list(rates)  
+    }
+  }
+  return(arboles)
 }
