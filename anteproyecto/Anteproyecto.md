@@ -1,4 +1,6 @@
-# Mineria de reglas reglas de asociación espaciales sobre bloques de Minecraft #
+# Minería de reglas reglas de asociación espaciales sobre bloques de Minecraft #
+
+## Búsqueda de patrones en el posicionamiento de bloques de Minecraft ##
 
 ## Código MINECRAFT_ASSO_MINING ##
 
@@ -6,26 +8,18 @@
 
 ## Proyecto ##
 
-La idea de este proyecto **era** crear un algoritmo de generación procedural de objetos dentro de un espacio bidimensional o tridimensional. Debido a la cantidad de trabajo y tiempo que requeriría un proyecto de esa magnitud, el proyecto se enfocara en una parte de esta idea anterior.
+Este proyecto se enfocara en la prueba de un algoritmo para inferencia de *reglas de asociación espacial* que ilustren los patrones de posicionamiento de objetos dentro de un escenario.
+Para probar realizar las pruebas, el escenario elegido sera una parte de un mapa generado en Minecraft.  
 
-Este proyecto se enfocara en la prueba de un algoritmo para inferencia de reglas de asociación espaciales entre objetos dentro de un escenario.En este caso particular, el escenario es un Terreno de Minecraft. Se buscara que las reglas de asociación ilustren los patrones que existen entre los bloques.
+Se buscaran reglas ilustren los patrones que existen entre los distintos bloques de un mundo generado de manera procedural del videojuego Minecraft.
 
-Concretamente se realizaran las pruebas con un mundo generado de manera procedural del videojuego Minecraft. Para la extracción de la información de los bloques del Juego se utilizara la biblioteca Anvil para Python. Como algoritmo para la inferencia de reglas se utilizara
-para la generación de Feature se utlilizara una implementación en R o Python.
-
-El algoritmo de inferencia de reglas de associacion a utilizar sera SPADA implementado en Prolog.
+Para la extracción de la información de los bloques del Juego se utilizara la biblioteca **Anvil** en Python. Como algoritmo para la inferencia de reglas se utilizara a el algoritmo **...**.
 
 ## Objetivos ##  
 
-1. Decidir un escenario con objetos determinado, que permita la fácil extracción de datos necesarios para la creación de las reglas de asociación.  [1/2 día]
+1. Detección de patrones evidentes y no tan evidentes dentro del escenario planteado
 
-2. Buscar una manera de extraer los datos de los diferentes entornos para construir la representación abstracta.  [ 1/4 día]
-
-3. Encontrar un algoritmo de creación de reglas de asociación que se adecué a este tipo de problemas.[5 días]
-
-4. Implementación del algoritmo [10 días]
-
-5. Buscar una manera de la fácil presentación de las reglas generadas.(realizar una traducción de ellas)[3 días]
+2. Corroborar que un acercamiento al problema de detección de patrones utilizando reglas de asociación es un buen camino
 
 ## Alcance y limitaciones ##
 
@@ -33,7 +27,35 @@ El algoritmo de inferencia de reglas de associacion a utilizar sera SPADA implem
 
 + También. de ser posible, se quiere evitar la necesidad de generación manual de datos para la resolución del problema.  
 
++ Tentativamente se podría generar un modelo evalué si se cumplen las reglas dentro de un entorno.  
+
 ## Métricas ##
+
++ Soporte: Mide la frecuencia con la que aparece en todas las transacciones.
+
+$$
+Support({X}\to{Y})  = \dfrac
+{\text{Transaction containing X and Y}}
+{\text{Total number of transactions}}
+$$
+
++ Confianza: Mide la probabilidad de que aparezca el consecuente dado un antecedente.
+
+$$
+confidence({X}\to{Y})  = \dfrac
+{\text{Transaction containing X and Y}}
+{\text{Transactions containing X}}
+$$
+
++ Sustentación: Calcula la probabilidad de ocurrencia del consecuente dado un antecedente.
+$$
+Lift({X}\to{Y})  =
+\dfrac{
+    \dfrac{\text{Transaction containing X and Y}}{\text{Transactions containing X}}
+    }{
+    \text{Fraction of transactions containing Y}
+    }
+$$
 
 ## Justificación ##
 
@@ -41,17 +63,20 @@ Actualmente existen varios algoritmos que permiten la generación procedural de 
 
 Por ello la idea del proyecto sería encontrar una manera de automatizar la generación de restricciones que utilizaría un algoritmo de generación procedural para el posicionamiento de los objetos dentro del escenario.
 
-De ahí que sea necesario la utilización de un algoritmo de machine learning para la deducción de estas reglas. Ya que los escenarios contienen datos que pueden ser utilizados para la deducción de la relación espacial que existe entre los objetos que estos contienen.  
+De ahí que sea necesario la utilización de un algoritmo de machine learning para la deducción de estas reglas y detección de patrones. Ya que los escenarios contienen datos que pueden ser utilizados para la deducción de la relación espacial que existe entre los objetos que estos contienen.  
 
-## Listado de actividades a realizar: ##
+## Listado de actividades a realizar ##
 
-1. Elegir el problema. Minecraft chunk
-2. Extract Minecraft chunk Data
-3. Investigar sobre la extraccion de los datos Minecraft (4 días)
-4. Creacion de un dataset de chuncks
-5. eleccion de algoritmo de inferencia de reglas.
-6. Vizualizador de reglas.
+1. Preprocesamiento de los datos iniciales para generar predicados espaciales que se utilizaran a la hora de realizar la inferencia.
 
-## Cronograma estimado de actividades ##
+2. Realizar gráficos de exploración de los datos de entrada y análisis.
+
+3. Codificación del algoritmo para inferencia de reglas propuesto.
+
+4. Realizar registro de las métricas particulares para evaluar las reglas de asociación obtenidas.
+
+5. Realizar el informe final con diagramas y conclusiones.
+
+## Cronograma Gannt estimado de actividades ##
 
 1. b
