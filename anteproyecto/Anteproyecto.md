@@ -77,6 +77,6 @@ De ahí que sea necesario la utilización de un algoritmo de machine learning pa
 
 5. Realizar el informe final con diagramas y conclusiones.
 
-## Cronograma Gannt estimado de actividades ##
+## Cronograma Gantt estimado de actividades ##
 
-1. b
+![Gantt de Anteproyecto](./Images/AnteproyectoGantt.png)
