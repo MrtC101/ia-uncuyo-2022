@@ -75,4 +75,6 @@ De ahí que sea necesario la utilización de un algoritmo de machine learning pa
 
 ## Cronograma Gantt estimado de actividades ##
 
+## Cronograma Gantt estimado de actividades ##
+
 ![Gantt de Anteproyecto](./Images/AnteproyectoGantt.png)
