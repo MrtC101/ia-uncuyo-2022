@@ -9,7 +9,6 @@
 ## Spacial Association Rules mining ##
 
 + [Enhancing spatial association rule mining in geographic databases](https://www.lume.ufrgs.br/handle/10183/7841)
-![chunk of text](./Images/what%20is%20spatial%20rule%20mining.png)
 + [POWERPOINT Spatial Association Rules](https://www.ismll.uni-hildesheim.de/lehre/spatial-09w/script/association_web.pdf)
 + [Papers del Power anterior](http://www.spatial.cs.umn.edu/paper_list.html)
 + [SPADA system for spatial association rules mining on spatial databases](https://edz.bib.uni-mannheim.de/www-edz/pdf/eurostat/02/KS-CS-02-001-EN-N-EN.pdf#page=26)

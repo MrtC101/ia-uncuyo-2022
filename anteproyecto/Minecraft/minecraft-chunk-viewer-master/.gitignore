@@ -1,7 +1,0 @@
-npm-debug.log*
-lib-cov
-assets
-dist
-node_modules
-.npm
-.DS_Store
