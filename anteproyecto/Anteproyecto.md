@@ -44,11 +44,10 @@ $$
 + Sustentación: Calcula la probabilidad de ocurrencia del consecuente dado un antecedente.
 $$
 Lift({X}\to{Y})  = \dfrac
-{
-    \dfrac{\text{Transaction containing X and Y}}{\text{Transactions containing X}}
-    }{
-    \text{Fraction of transactions containing Y}
-    }
+{\text{Transaction containing X and Y / Transactions containing X}
+}{
+\text{Fraction of transactions containing Y}
+}
 $$
 
 ## Justificación ##
