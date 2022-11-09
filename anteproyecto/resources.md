@@ -28,3 +28,4 @@
 + [Minecraft Region file format](https://minecraft.fandom.com/wiki/Region_file_format)
 + [Minecraft Region file Wikipedia](https://wiki.vg/Region_Files)
 + [Formato NBT](https://minecraft.fandom.com/es/wiki/Formato_NBT)
++ [Anvil Parser](https://github.com/matcool/anvil-parser)

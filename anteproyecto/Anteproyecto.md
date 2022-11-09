@@ -6,9 +6,16 @@
 
 ## Proyecto ##
 
-Este proyecto se enfocara en la prueba de un algoritmo para inferencia de *reglas de asociación* que ilustren los patrones de posicionamiento de objetos dentro de un escenario o espacio. Este tipo de problema es tratado por un area de las ciencias de la computación llamado *Minería de reglas de asociación espaciales*. Se trata de un problema de minería de reglas de asociación particular donde se trabaja desde el punto de vista de objetos que interaccionan entre si dentro de un espacio.
+Este proyecto se enfocara en la prueba de un algoritmo para inferencia de *reglas de asociación* que ilustren los patrones de posicionamiento de objetos dentro de un escenario o espacio. Este tipo de problema es tratado por un area de las ciencias de la computación llamado *Minería de reglas de asociación espaciales*.
 
-Como aplicación para el algoritmo elegido para este proyecto, realizaré la inferencia de reglas de asociación espacial un mapa del videojuego Minecraft. Los mapas de Minecraft son generados mediante un proceso de generación procedural y están compuestos enteramente por cubos. Haciendo uso de la biblioteca **Anvil** de Python para extraer la información de los bloques que componen el mapa del juego, se realizara la inferencia de reglas que puedan representar los patrones y relaciones entre los distintos tipos de bloques.
+Del documento [Enhancing spatial association rule mining in geographic databases] se puede entender que trata de un problema de minería de reglas de asociación particular donde se trabaja desde el punto de vista de objetos que interaccionan entre si dentro de un espacio.  
+
+En consecuencia de que la extracción de datos de la realidad es una tarea compleja, realizaré la inferencia de reglas de asociación espacial un mapa del videojuego Minecraft.  
+Los mapas de Minecraft son generados mediante un proceso de generación procedural y están compuestos enteramente por cubos. Esto permite la fácil extracción de datos. La elección de este escenario fue inspirada en el proyecto [Minecraft Chunk Viewer].
+
+Haciendo uso de la biblioteca [Anvil Parser] de Python para extraer la información de los bloques que componen el mapa del juego, se puede generar un archivo [CSV de Bloques]. Sobre este, realizara la inferencia de reglas que puedan representar los patrones y relaciones entre los distintos tipos de bloques.
+
+
 
 ## Objetivos ##  
 
@@ -24,6 +31,8 @@ Como aplicación para el algoritmo elegido para este proyecto, realizaré la inf
 + También, de ser posible, se quiere evitar la necesidad de generación manual de datos para la resolución del problema.  
 
 ## Métricas ##
+
+Utilizare [Métricas para reglas de association].
 
 + Soporte: Mide la frecuencia con la que aparece en todas las transacciones.
 
@@ -60,18 +69,32 @@ De ahí que sea necesario la utilización de un algoritmo de machine learning pa
 
 ## Listado de actividades a realizar ##
 
-1. Estudio y análisis de bibliografía y recursos para la elección de un algoritmo apropiado. (4 días)
-2. Preprocesamiento de los datos iniciales para generar predicados espaciales que se utilizaran a la hora de realizar la inferencia. (1 día)
-3. Realizar gráficos de exploración de los datos de entrada y análisis.(1 día)
-4. Codificación del algoritmo para inferencia de reglas propuesto. (4 días)
-5. Generación de las métricas particulares para evaluar las reglas de asociación obtenidas.(2 día)
-6. Elaboración del Informe final con los resultados obtenidos y conclusiones (4 días)
+1. Estudio y análisis de bibliografía y recursos para la elección de un algoritmo apropiado. (7 días)
+2. Preprocesamiento de los datos iniciales para generar predicados espaciales que se utilizaran a la hora de realizar la inferencia. (3 día)
+3. Realizar gráficos de exploración de los datos de entrada y análisis.(3 día)
+4. Codificación del algoritmo para inferencia de reglas propuesto. (7 días)
+5. Generación de las métricas particulares para evaluar las reglas de asociación obtenidas.(4 día)
+6. Elaboración del Informe final con los resultados obtenidos y conclusiones (7 días)
 
 ## Actividades tentativas ##
 
-7. Creación de un modelo capaz de valuar si se cumplen un conjunto de reglas inferidas en un escenario. (4 días)
-8. Generación de métricas adicionales a partir del modelo obtenido.(1 día)
+7. Creación de un modelo capaz de valuar si se cumplen un conjunto de reglas inferidas en un escenario. (7 días)
+8. Generación de métricas adicionales a partir del modelo obtenido.(2 día)
 
 ## Cronograma Gantt estimado de actividades ##
 
 ![Gantt de Anteproyecto](./Images/AnteproyectoGantt.png)
+
+## Bibliografía y Links ##
+
++ [Métricas para reglas de association]
++ [Anvil Parser]
++ [CSV de Bloques]
++ [Minecraft Chunk Viewer]
++ [Enhancing spatial association rule mining in geographic databases]
+
+[Enhancing spatial association rule mining in geographic databases]:https://www.lume.ufrgs.br/handle/10183/7841
+[Minecraft Chunk Viewer]:https://pessimistress.github.io/minecraft/
+[CSV de Bloques]:(.\anteproyecto\Minecraft\chunkTest.csv)
+[Anvil Parser]:(https://github.com/matcool/anvil-parser)
+[Métricas para reglas de association]:https://towardsdatascience.com/association-rules-2-aa9a77241654
