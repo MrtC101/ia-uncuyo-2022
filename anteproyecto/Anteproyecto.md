@@ -54,7 +54,8 @@ $$
 
 $$
 Lift({X}\to{Y})  = \dfrac
-{\text{Transaction containing X and Y / Transactions containing X}}
+{\dfrac{\text{Transaction containing X and Y}}
+{\text{Transactions containing X}}}
 {\text{Fraction of transactions containing Y}}
 $$
 
