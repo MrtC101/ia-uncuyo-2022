@@ -50,9 +50,12 @@ confidence({X}\to{Y})  = \dfrac
 {\text{Transactions containing X}}
 $$
 
-+ Sustentación: Calcula la probabilidad de ocurrencia del consecuente dado un antecedente.
++ Sustentación: Calcula la probabilidad de ocurrencia del consecuente dado un antecedente.  
+
 $$
-Lift({X}\to{Y})  = \dfrac{\text{Transaction containing X and Y / Transactions containing X}}{\text{Fraction of transactions containing Y}}
+Lift({X}\to{Y})  = \dfrac
+{\text{Transaction containing X and Y / Transactions containing X}}
+{\text{Fraction of transactions containing Y}}
 $$
 
 ## Justificación ##
@@ -91,6 +94,6 @@ De ahí que sea necesario la utilización de un algoritmo de machine learning pa
 
 [Enhancing spatial association rule mining in geographic databases]:https://www.lume.ufrgs.br/handle/10183/7841
 [Minecraft Chunk Viewer]:https://pessimistress.github.io/minecraft/
-[CSV de Bloques]:.\Minecraft\chunkTest.csv)
+[CSV de Bloques]:.\Minecraft\chunkTest.csv
 [Anvil Parser]:https://github.com/matcool/anvil-parser
 [Métricas para reglas de association]:https://towardsdatascience.com/association-rules-2-aa9a77241654
